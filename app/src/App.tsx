@@ -15,6 +15,16 @@ import ElectricBorder from '@/components/ElectricBorder';
 import { FallingPattern } from '@/components/FallingPattern';
 import CardFlip from '@/components/CardFlip';
 import { IconCloudDemo } from '@/components/IconCloudDemo';
+import { Timeline } from '@/components/Timeline';
+import eternaLogo from '@/assets/lanyard/images/eterna.png';
+import webstartiomLogo from '@/assets/lanyard/images/webstartiom.png';
+import outlierLogo from '@/assets/lanyard/images/outlier.png';
+import inpaqLogo from '@/assets/lanyard/images/inpaq.png';
+import njcpImage from '@/assets/lanyard/images/2304x1296.webp';
+import sionImage from '@/assets/lanyard/images/further_front.jpg';
+import quantumImage from '@/assets/lanyard/images/park_cam-23-1-scaled.jpg';
+import terraImage from '@/assets/lanyard/images/mineral-processing-facility.jpeg';
+import merdekaImage from '@/assets/lanyard/images/830266_1200.jpg';
 
 // Animation variants with proper types
 const fadeInUp: Variants = {
@@ -338,7 +348,7 @@ function HeroSection() {
               style={{ textShadow: '0 0 20px rgba(167,139,250,0.8), 0 0 40px rgba(167,139,250,0.4)' }}
               className="text-purple-300 text-sm uppercase tracking-widest font-semibold"
             >
-              ISB 24
+              ISB '24
             </span>
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-400/30 to-transparent" style={{ boxShadow: '0 0 10px rgba(167,139,250,0.5)' }} />
           </motion.div>
@@ -665,171 +675,130 @@ function ToolsStackSection() {
 
 // Work Experience Section with sticky stacking cards
 function WorkExperienceSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"]
-  });
-
-  const experiences = [
+  const timelineData = [
     {
-      year: '2025',
-      title: 'Full-Stack Engineer & Systems Documentation Lead',
-      company: 'Eterna - Indonesia',
-      period: 'Oct 2025 - Present',
-      description: 'Authored comprehensive system documentation for the Merdeka client project. Contributed to DevOps operations including CI/CD pipeline configuration and deployment management. Developed QA test plans and built full-stack features using Next.js and React.',
-      gradient: 'from-blue-500 to-purple-600',
-      bgColor: 'bg-blue-950',
+      title: '2025',
+      content: (
+        <a href="https://www.eternaindonesia.com/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-blue-950 to-purple-950 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-blue-500/20 hover:shadow-2xl hover:-translate-y-1 group">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500 to-purple-600 opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-30 transition-opacity" />
+          <div className="relative z-10">
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <span className="text-sm text-white/50 uppercase tracking-wider font-medium group-hover:text-white/80 transition-colors">
+                Eterna - Indonesia
+              </span>
+              <span className="w-1 h-1 rounded-full bg-white/30" />
+              <span className="text-sm text-white/50">Oct 2025 - Present</span>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-blue-300 transition-colors">Full-Stack Engineer & Systems Documentation Lead</h3>
+            <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">Authored comprehensive system documentation for the Merdeka client project. Contributed to DevOps operations including CI/CD pipeline configuration and deployment management. Developed QA test plans and built full-stack features using Next.js and React.</p>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {['Next.js', 'React', 'DevOps', 'CI/CD', 'QA'].map((skill, i) => (
+                <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
+                  {skill}
+                </span>
+              ))}
+            </div>
+            <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
+              <img src={eternaLogo} alt="Eterna Indonesia" className="w-full h-64 object-cover" />
+            </div>
+            <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
+          </div>
+        </a>
+      ),
     },
     {
-      year: '2025',
-      title: 'Machine Learning Developer & Project Manager',
-      company: 'Webstartiom - UK',
-      period: 'Mar 2025 - Oct 2025',
-      description: 'Managed multiple projects in Jira, overseeing timelines and deliverables. Developed and integrated APIs for AI-driven projects. Conducted web data scraping and provided client support while maintaining clear communication.',
-      gradient: 'from-orange-500 to-pink-500',
-      bgColor: 'bg-orange-950',
+      title: '2025',
+      content: (
+        <a href="https://webstartiom.com/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-orange-950 to-pink-950 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-orange-500/20 hover:shadow-2xl hover:-translate-y-1 group">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-orange-500 to-pink-500 opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-30 transition-opacity" />
+          <div className="relative z-10">
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <span className="text-sm text-white/50 uppercase tracking-wider font-medium group-hover:text-white/80 transition-colors">
+                Webstartiom - UK
+              </span>
+              <span className="w-1 h-1 rounded-full bg-white/30" />
+              <span className="text-sm text-white/50">Mar 2025 - Oct 2025</span>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-orange-300 transition-colors">Machine Learning Developer & Project Manager</h3>
+            <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">Managed multiple projects in Jira, overseeing timelines and deliverables. Developed and integrated APIs for AI-driven projects. Conducted web data scraping and provided client support while maintaining clear communication.</p>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {['Jira', 'API Development', 'Python', 'Web Scraping'].map((skill, i) => (
+                <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
+                  {skill}
+                </span>
+              ))}
+            </div>
+            <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
+              <img src={webstartiomLogo} alt="Webstartiom" className="w-full h-64 object-cover" />
+            </div>
+            <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
+          </div>
+        </a>
+      ),
     },
     {
-      year: '2024',
-      title: 'AI Trainer',
-      company: 'Outlier AI - USA',
-      period: 'Nov 2024 - Dec 2025',
-      description: 'Trained AI models by generating, reviewing, and refining datasets. Evaluated AI outputs for accuracy and coherence. Created prompt-response pairs and conducted domain-specific training to improve model performance.',
-      gradient: 'from-green-500 to-cyan-500',
-      bgColor: 'bg-green-950',
+      title: '2024',
+      content: (
+        <a href="https://outlier.ai/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-green-950 to-cyan-950 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-green-500/20 hover:shadow-2xl hover:-translate-y-1 group">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-green-500 to-cyan-500 opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-30 transition-opacity" />
+          <div className="relative z-10">
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <span className="text-sm text-white/50 uppercase tracking-wider font-medium group-hover:text-white/80 transition-colors">
+                Outlier AI - USA
+              </span>
+              <span className="w-1 h-1 rounded-full bg-white/30" />
+              <span className="text-sm text-white/50">Nov 2024 - Dec 2025</span>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-green-300 transition-colors">AI Trainer</h3>
+            <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">Trained AI models by generating, reviewing, and refining datasets. Evaluated AI outputs for accuracy and coherence. Created prompt-response pairs and conducted domain-specific training to improve model performance.</p>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {['AI Training', 'Data Annotation', 'Machine Learning'].map((skill, i) => (
+                <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
+                  {skill}
+                </span>
+              ))}
+            </div>
+            <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
+              <img src={outlierLogo} alt="Outlier AI" className="w-full h-64 object-cover" />
+            </div>
+            <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
+          </div>
+        </a>
+      ),
     },
     {
-      year: '2023',
-      title: 'Electroplating Data & Machine Operator',
-      company: 'INPAQ Technology Co., Ltd. - Taiwan',
-      period: 'Sep 2023 - May 2024',
-      description: 'Recorded and maintained daily data of all items processed in the electroplating department. Managed and monitored machines, ensuring proper operation. Conducted routine chemical level checks and maintained operational efficiency.',
-      gradient: 'from-cyan-500 to-blue-500',
-      bgColor: 'bg-cyan-950',
+      title: '2023',
+      content: (
+        <a href="https://www.inpaqgp.com/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-cyan-950 to-blue-950 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-cyan-500/20 hover:shadow-2xl hover:-translate-y-1 group">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500 to-blue-500 opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-30 transition-opacity" />
+          <div className="relative z-10">
+            <div className="flex flex-wrap items-center gap-3 mb-3">
+              <span className="text-sm text-white/50 uppercase tracking-wider font-medium group-hover:text-white/80 transition-colors">
+                INPAQ Technology Co., Ltd. - Taiwan
+              </span>
+              <span className="w-1 h-1 rounded-full bg-white/30" />
+              <span className="text-sm text-white/50">Sep 2023 - May 2024</span>
+            </div>
+            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors">Electroplating Data & Machine Operator</h3>
+            <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">Recorded and maintained daily data of all items processed in the electroplating department. Managed and monitored machines, ensuring proper operation. Conducted routine chemical level checks and maintained operational efficiency.</p>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {['Data Management', 'Quality Control', 'Process Monitoring'].map((skill, i) => (
+                <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
+                  {skill}
+                </span>
+              ))}
+            </div>
+            <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
+              <img src={inpaqLogo} alt="INPAQ Technology" className="w-full h-64 object-cover" />
+            </div>
+            <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
+          </div>
+        </a>
+      ),
     },
   ];
 
-  return (
-    <section ref={containerRef} className="relative bg-black" style={{ height: `${(experiences.length + 1) * 100}vh` }}>
-      {/* Section Header - Sticky */}
-      <div className="sticky top-0 h-screen flex flex-col justify-start pt-20 z-0">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
-          <motion.h2 
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-6xl font-bold text-white mb-4"
-          >
-            Work <span className="text-gradient">Experience</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-white/60 max-w-xl"
-          >
-            Scroll to explore my journey through each role
-          </motion.p>
-        </div>
-      </div>
-
-      {/* Stacking Experience Cards */}
-      {experiences.map((exp, index) => {
-        const cardProgress = useTransform(
-          scrollYProgress,
-          [index / experiences.length, (index + 0.5) / experiences.length, (index + 1) / experiences.length],
-          [0, 1, 1]
-        );
-        const cardY = useTransform(cardProgress, [0, 1], [100, 0]);
-        const cardScale = useTransform(cardProgress, [0, 1], [0.9, 1]);
-        const cardOpacity = useTransform(cardProgress, [0, 0.3, 1], [0, 1, 1]);
-
-        return (
-          <div
-            key={index}
-            className="sticky top-24 h-[calc(100vh-6rem)] flex items-center justify-center"
-            style={{ zIndex: index + 1 }}
-          >
-            <motion.div
-              style={{ 
-                y: cardY, 
-                scale: cardScale, 
-                opacity: cardOpacity 
-              }}
-              className="w-full max-w-5xl mx-auto px-6"
-            >
-              <div className={`${exp.bgColor} rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden`}>
-                {/* Gradient background effect */}
-                <div className={`absolute top-0 right-0 w-96 h-96 bg-gradient-to-br ${exp.gradient} opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2`} />
-                
-                {/* Content */}
-                <div className="relative z-10">
-                  <div className="flex flex-col md:flex-row md:items-start gap-8">
-                    {/* Year Badge */}
-                    <div className="flex-shrink-0">
-                      <div className={`inline-flex items-center justify-center w-24 h-24 rounded-2xl bg-gradient-to-br ${exp.gradient} shadow-lg`}>
-                        <span className="text-3xl md:text-4xl font-black text-white">{exp.year}</span>
-                      </div>
-                    </div>
-                    
-                    {/* Details */}
-                    <div className="flex-1">
-                      <div className="flex flex-wrap items-center gap-3 mb-3">
-                        <span className="text-sm text-white/50 uppercase tracking-wider font-medium">{exp.company}</span>
-                        <span className="w-1 h-1 rounded-full bg-white/30" />
-                        <span className="text-sm text-white/50">{exp.period}</span>
-                      </div>
-                      <h3 className="text-2xl md:text-4xl font-bold text-white mb-4">{exp.title}</h3>
-                      <p className="text-white/70 text-base md:text-lg leading-relaxed max-w-2xl">{exp.description}</p>
-                      
-                      {/* Skills tags */}
-                      <div className="flex flex-wrap gap-2 mt-6">
-                        {index === 0 && ['Next.js', 'React', 'DevOps', 'CI/CD', 'QA'].map((skill, i) => (
-                          <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
-                            {skill}
-                          </span>
-                        ))}
-                        {index === 1 && ['Jira', 'API Development', 'Python', 'Web Scraping'].map((skill, i) => (
-                          <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
-                            {skill}
-                          </span>
-                        ))}
-                        {index === 2 && ['AI Training', 'Data Annotation', 'Machine Learning'].map((skill, i) => (
-                          <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
-                            {skill}
-                          </span>
-                        ))}
-                        {index === 3 && ['Data Management', 'Quality Control', 'Process Monitoring'].map((skill, i) => (
-                          <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Decorative elements */}
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                  className="absolute bottom-4 right-4 w-16 h-16 border border-white/10 rounded-full"
-                />
-                <motion.div
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                  className="absolute bottom-8 right-8 w-8 h-8 border border-white/5 rounded-full"
-                />
-              </div>
-            </motion.div>
-          </div>
-        );
-      })}
-    </section>
-  );
+  return <Timeline data={timelineData} />;
 }
 
 // Recent Works Section with scroll animations
@@ -839,12 +808,12 @@ function RecentWorksSection() {
   const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
 
   const projects = [
-    { name: 'Merdeka Client System', category: 'Full-Stack Development', tags: ['Next.js', 'React', 'DevOps'], gradient: 'gradient-blue' },
-    { name: 'Automation Workflows', category: 'Process Automation', tags: ['n8n', 'Apps Script'], gradient: 'gradient-cyan' },
-    { name: 'AI-Driven API Integration', category: 'Backend Development', tags: ['Python', 'REST APIs'], gradient: 'gradient-purple' },
-    { name: 'System Architecture Documentation', category: 'Technical Documentation', tags: ['Architecture Design', 'DevOps'], gradient: 'gradient-green' },
-    { name: 'CI/CD Pipeline Setup', category: 'DevOps', tags: ['Docker', 'GitHub', 'CI/CD'], gradient: 'gradient-orange' },
-    { name: 'QA Test Automation', category: 'Quality Assurance', tags: ['Testing', 'Bug Tracking'], gradient: 'gradient-pink' },
+    { name: 'NJCP Football', category: 'Full-Stack Development', tags: ['Frontend Dev', 'QA Testing', 'Architecture Design'], gradient: 'gradient-blue', link: 'https://njcpfootball.com/', image: njcpImage },
+    { name: 'Sion Education', category: 'Full-Stack Development', tags: ['Frontend Dev', 'Database Schema', 'Architecture Design'], gradient: 'gradient-cyan', link: 'https://sion-education-website.vercel.app/', image: sionImage },
+    { name: 'Quantum Luminous', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-purple', link: 'https://quantum-luminous.webflow.io/', image: quantumImage },
+    { name: 'Terra Mineral Nusantara', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-green', link: 'https://terra-mineral-nusantara.webflow.io/', image: terraImage },
+    { name: 'Merdeka Client System', category: 'Project Management & QA', tags: ['System Documentation', 'QA Testing', 'Project Manager'], gradient: 'gradient-orange', link: 'https://merdeka.app/login', image: merdekaImage },
+    { name: 'CI/CD Pipeline', category: 'DevOps', tags: ['Docker', 'GitHub Actions', 'CI/CD'], gradient: 'gradient-pink' },
   ];
 
   return (
@@ -881,8 +850,17 @@ function RecentWorksSection() {
               onClick={() => setSelectedProject(project)}
               className="group relative bg-white/5 rounded-2xl overflow-hidden cursor-pointer hover:bg-white/10 transition-all duration-500"
             >
-              <div className={`h-48 ${project.gradient} opacity-40 group-hover:opacity-70 transition-all duration-500`} />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+              {project.image ? (
+                <>
+                  <div className="relative h-48 w-full">
+                    <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/70 group-hover:bg-black/60 transition-all duration-500" />
+                  </div>
+                </>
+              ) : (
+                <div className={`h-48 ${project.gradient} opacity-40 group-hover:opacity-70 transition-all duration-500`} />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
               <div className="absolute bottom-0 left-0 right-0 p-6">
                 <p className="text-xs text-white/50 uppercase tracking-wider mb-1">{project.category}</p>
                 <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">{project.name}</h3>
@@ -907,18 +885,41 @@ function RecentWorksSection() {
       </div>
 
       <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
-        <DialogContent className="bg-white text-black max-w-2xl">
+        <DialogContent className="bg-black/95 text-white max-w-2xl border border-white/10">
           <DialogHeader>
-            <p className="text-sm text-black/50 uppercase tracking-wider">{selectedProject?.category}</p>
-            <DialogTitle className="text-3xl font-bold">{selectedProject?.name}</DialogTitle>
+            <p className="text-sm text-white/50 uppercase tracking-wider">{selectedProject?.category}</p>
+            <DialogTitle className="text-3xl font-bold text-white">{selectedProject?.name}</DialogTitle>
           </DialogHeader>
           <div className="mt-4">
-            <div className={`h-48 ${selectedProject?.gradient} rounded-xl mb-6 opacity-60`} />
-            <p className="text-black/70 leading-relaxed">
-              This project was developed using {selectedProject?.tags.join(', ')}, focusing on scalability, 
-              maintainability, and optimal performance. The solution was designed to meet client requirements 
-              while ensuring robust technical architecture and comprehensive documentation.
+            {selectedProject?.image ? (
+              <img src={selectedProject.image} alt={selectedProject.name} className="w-full h-auto rounded-xl mb-6 border border-white/20" />
+            ) : (
+              <div className={`h-48 ${selectedProject?.gradient} rounded-xl mb-6 opacity-60`} />
+            )}
+            <p className="text-white/70 leading-relaxed mb-4">
+              {selectedProject?.name === 'NJCP Football' 
+                ? 'Developed the frontend interface, conducted comprehensive QA testing, and designed the system architecture for NJCP Football. The project focuses on delivering a seamless user experience with robust testing practices and scalable architecture design.'
+                : selectedProject?.name === 'Sion Education'
+                ? 'Built the entire front end, database schema, and architecture for Sion Education. The project delivers a comprehensive educational platform with robust data management and scalable system design.'
+                : selectedProject?.name === 'Quantum Luminous'
+                ? 'Led the UI/UX design, created 3D models, and conducted User Acceptance Testing for Quantum Luminous. The project showcases immersive 3D experiences with intuitive user interfaces and rigorous quality assurance.'
+                : selectedProject?.name === 'Terra Mineral Nusantara'
+                ? 'Led the UI/UX design, created 3D models, and conducted User Acceptance Testing for Terra Mineral Nusantara. The project delivers an industrial-grade web experience with detailed 3D visualizations and comprehensive quality assurance.'
+                : selectedProject?.name === 'Merdeka Client System'
+                ? 'Managed system documentation, conducted comprehensive QA testing, and served as Project Manager for Merdeka Client System. The project ensures high-quality deliverables through meticulous documentation, rigorous testing protocols, and effective project coordination.'
+                : `This project was developed using ${selectedProject?.tags.join(', ')}, focusing on scalability, maintainability, and optimal performance. The solution was designed to meet client requirements while ensuring robust technical architecture and comprehensive documentation.`
+              }
             </p>
+            {selectedProject?.link && (
+              <a 
+                href={selectedProject.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium transition-colors"
+              >
+                Visit Website <ArrowUpRight className="w-4 h-4" />
+              </a>
+            )}
           </div>
         </DialogContent>
       </Dialog>
