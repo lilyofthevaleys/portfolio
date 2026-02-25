@@ -1,10 +1,20 @@
-import { useState, useRef } from 'react';
-import { Menu, X, ArrowUpRight, Sparkles, Flower2 } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Menu, X, ArrowUpRight, Sparkles, Flower2, Code2, Rocket, Zap, Palette, Briefcase, ClipboardCheck } from 'lucide-react';
+import { SiGoogleappsscript, SiAmazonwebservices, SiTrello, SiAsana, SiDiscord, SiCivicrm } from 'react-icons/si';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { motion, useScroll, useTransform, useInView, type Variants } from 'framer-motion';
+import gsap from 'gsap';
+import DarkVeil from '@/components/DarkVeil';
+import DotGrid from '@/components/DotGrid';
+import Lanyard from '@/components/Lanyard';
+import SpotlightCard from '@/components/SpotlightCard';
+import ElectricBorder from '@/components/ElectricBorder';
+import { FallingPattern } from '@/components/FallingPattern';
+import CardFlip from '@/components/CardFlip';
+import { IconCloudDemo } from '@/components/IconCloudDemo';
 
 // Animation variants with proper types
 const fadeInUp: Variants = {
@@ -120,15 +130,30 @@ function Navigation({ onNavigate }: { onNavigate: (section: string) => void }) {
               >
                 <p className="text-sm text-black/40 mb-4">Socials</p>
                 <div className="flex flex-wrap gap-4">
-                  {['TikTok', 'GitHub', 'LinkedIn', 'Behance', 'Dribbble'].map((social) => (
-                    <a
-                      key={social}
-                      href="#"
-                      className="text-sm text-black/60 hover:text-black transition-colors line-reveal"
-                    >
-                      {social}
-                    </a>
-                  ))}
+                  <a
+                    href="https://github.com/lilyofthevaleys"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-black/60 hover:text-black transition-colors line-reveal"
+                  >
+                    GitHub
+                  </a>
+                  <a
+                    href="https://www.linkedin.com/in/charlene-athena-0316b3354"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-black/60 hover:text-black transition-colors line-reveal"
+                  >
+                    LinkedIn
+                  </a>
+                  <a
+                    href="https://www.instagram.com/tututunaaa?igsh=MWZqcHYyOW82MjQyMg%3D%3D&utm_source=qr"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-black/60 hover:text-black transition-colors line-reveal"
+                  >
+                    Instagram
+                  </a>
                 </div>
               </motion.div>
             </div>
@@ -147,9 +172,97 @@ function HeroSection() {
   const y3 = useTransform(scrollY, [0, 500], [0, -80]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const scale = useTransform(scrollY, [0, 500], [1, 0.9]);
+  
+  const charleneRef = useRef<HTMLHeadingElement>(null);
+  const athenaRef = useRef<HTMLHeadingElement>(null);
+
+  // GSAP Glowing animation
+  useEffect(() => {
+    if (charleneRef.current && athenaRef.current) {
+      // White glow for CHARLENE
+      gsap.to(charleneRef.current, {
+        textShadow: '0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(147,197,253,0.6), 0 0 60px rgba(196,181,253,0.4)',
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'power1.inOut'
+      });
+      
+      // Purple glow for ATHENA
+      gsap.to(athenaRef.current, {
+        textShadow: '0 0 20px rgba(167,139,250,0.8), 0 0 40px rgba(167,139,250,0.6), 0 0 60px rgba(139,92,246,0.4)',
+        duration: 2,
+        repeat: -1,
+        yoyo: true,
+        ease: 'power1.inOut'
+      });
+    }
+  }, []);
+
+  // Split text into letters for individual animation
+  const splitText = (text: string, defaultColor: string = '#ffffff') => {
+    return text.split('').map((char, index) => (
+      <span
+        key={index}
+        className="letter"
+        onMouseEnter={(e) => {
+          const colors = ['#60a5fa', '#a78bfa', '#f472b6', '#fbbf24', '#34d399', '#f87171'];
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          gsap.to(e.currentTarget, {
+            color: randomColor,
+            textShadow: `0 0 30px ${randomColor}, 0 0 60px ${randomColor}`,
+            scale: 1.1,
+            duration: 0.3,
+            ease: 'power2.out'
+          });
+        }}
+        onMouseLeave={(e) => {
+          gsap.to(e.currentTarget, {
+            color: defaultColor,
+            textShadow: defaultColor === '#a78bfa' 
+              ? '0 0 20px rgba(167,139,250,0.8), 0 0 40px rgba(167,139,250,0.6)'
+              : '0 0 20px rgba(255,255,255,0.8)',
+            scale: 1,
+            duration: 0.5,
+            ease: 'power2.inOut'
+          });
+        }}
+        style={{ display: 'inline-block', color: defaultColor }}
+      >
+        {char === ' ' ? '\u00A0' : char}
+      </span>
+    ));
+  };
 
   return (
-    <section id="hero" className="relative min-h-screen bg-black overflow-hidden flex items-center">
+    <section id="hero" className="relative min-h-screen overflow-hidden flex items-center">
+      {/* Dark Veil Background */}
+      <div className="absolute inset-0">
+        <DarkVeil
+          hueShift={0}
+          noiseIntensity={0}
+          scanlineIntensity={0}
+          speed={0.5}
+          scanlineFrequency={0}
+          warpAmount={0}
+        />
+      </div>
+
+      {/* Interactive Dot Grid */}
+      <div className="absolute inset-0 opacity-40">
+        <DotGrid
+          dotSize={5}
+          gap={15}
+          baseColor="#271E37"
+          activeColor="#a78bfa"
+          proximity={120}
+          shockRadius={250}
+          shockStrength={5}
+          resistance={750}
+          returnDuration={1.5}
+        />
+      </div>
+      
       {/* Animated gradient orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div 
@@ -170,50 +283,10 @@ function HeroSection() {
         />
       </div>
 
-      {/* Animated Flowers Background with parallax */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.img
-          style={{ y: y1 }}
-          src="/images/flower-1.png"
-          alt=""
-          className="absolute top-[10%] left-[5%] w-48 md:w-72 opacity-60 float"
-        />
-        <motion.img
-          style={{ y: y2 }}
-          src="/images/flower-2.png"
-          alt=""
-          className="absolute top-[20%] right-[10%] w-56 md:w-80 opacity-50 float-delayed"
-        />
-        <motion.img
-          style={{ y: y3 }}
-          src="/images/flower-3.png"
-          alt=""
-          className="absolute bottom-[30%] left-[15%] w-40 md:w-64 opacity-40 float-slow"
-        />
+      {/* Lanyard on the right */}
+      <div className="absolute right-0 top-0 w-full md:w-1/3 h-full z-50 pointer-events-auto" style={{ transform: 'translateX(-25%)' }}>
+        <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} transparent={true} />
       </div>
-
-      {/* Hero Portrait with reveal animation */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.8, x: 100 }}
-        animate={{ opacity: 1, scale: 1, x: 0 }}
-        transition={{ delay: 0.5, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        style={{ opacity, scale }}
-        className="absolute right-[10%] top-1/2 -translate-y-1/2 hidden lg:block"
-      >
-        <div className="relative">
-          <motion.div
-            animate={{ rotate: [0, 5, 0, -5, 0] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -inset-4 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-3xl blur-xl"
-          />
-          <img
-            src="/images/hero-portrait.jpg"
-            alt="Seak Chhengly"
-            className="relative w-[400px] h-[500px] object-cover rounded-3xl"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent rounded-3xl" />
-        </div>
-      </motion.div>
 
       {/* Content */}
       <motion.div 
@@ -221,43 +294,35 @@ function HeroSection() {
         className="relative z-10 w-full px-6 md:px-12 lg:px-20 py-20"
       >
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid gap-12 items-center">
             <motion.div
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
+              className="relative"
             >
               <motion.h1 
+                ref={charleneRef}
                 variants={fadeInUp}
                 className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-none tracking-tight text-glow"
               >
-                SEAK
+                {splitText('CHARLENE')}
               </motion.h1>
               <motion.h1 
+                ref={athenaRef}
                 variants={fadeInUp}
-                className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-none tracking-tight italic text-gradient"
+                className="text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tight italic"
               >
-                CHHENGLY
+                {splitText('ATHENA', '#a78bfa')}
               </motion.h1>
-            </motion.div>
-            <motion.div 
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="lg:text-right"
-            >
-              <motion.h2 
+              
+              {/* Job Title */}
+              <motion.p
                 variants={fadeInUp}
-                className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-none"
+                className="mt-6 text-lg md:text-xl text-white/80 font-light"
               >
-                WEB
-              </motion.h2>
-              <motion.h2 
-                variants={fadeInUp}
-                className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-none italic text-gradient-blue"
-              >
-                DEVELOPER
-              </motion.h2>
+                Technical Associate <span className="text-purple-400">@</span> Eterna Indonesia
+              </motion.p>
             </motion.div>
           </div>
 
@@ -266,11 +331,16 @@ function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="mt-12 flex items-center gap-4"
+            className="mt-64 flex items-center gap-4"
           >
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-            <span className="text-white/60 text-sm uppercase tracking-widest">UX/UI Designer</span>
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-400/30 to-transparent" style={{ boxShadow: '0 0 10px rgba(167,139,250,0.5)' }} />
+            <span 
+              style={{ textShadow: '0 0 20px rgba(167,139,250,0.8), 0 0 40px rgba(167,139,250,0.4)' }}
+              className="text-purple-300 text-sm uppercase tracking-widest font-semibold"
+            >
+              ISB 24
+            </span>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-400/30 to-transparent" style={{ boxShadow: '0 0 10px rgba(167,139,250,0.5)' }} />
           </motion.div>
         </div>
       </motion.div>
@@ -280,14 +350,20 @@ function HeroSection() {
         <div className="marquee whitespace-nowrap flex">
           {[...Array(4)].map((_, i) => (
             <span key={i} className="text-2xl md:text-4xl font-bold text-white mx-8">
-              DESIGNING TOMORROW'S INTERFACES TODAY. 
+              BUILDING TOMORROW'S SYSTEMS TODAY. 
               <span className="mx-4 text-blue-400">→</span>
-              WEB DESIGNER 
+              FULL-STACK ENGINEER 
               <span className="mx-4 text-purple-400">→</span>
-              FRONTEND DEVELOPER 
+              DEVOPS & CI/CD 
               <span className="mx-4 text-pink-400">→</span>
-              UX/UI DESIGNER 
+              AUTOMATION DEVELOPER 
               <span className="mx-4 text-cyan-400">→</span>
+              UI/UX DESIGNER 
+              <span className="mx-4 text-blue-400">→</span>
+              PROJECT MANAGER 
+              <span className="mx-4 text-purple-400">→</span>
+              QA TESTER 
+              <span className="mx-4 text-pink-400">→</span>
             </span>
           ))}
         </div>
@@ -301,49 +377,91 @@ function ProjectsShowcase() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const projects = [
-    { name: 'Digital Agency', category: 'Website Design', gradient: 'gradient-blue' },
-    { name: 'Software Agency', category: 'Website Design', gradient: 'gradient-cyan' },
-    { name: 'Aurora Earbuds', category: 'Product Design', gradient: 'gradient-purple' },
-    { name: 'Analytics Dashboard', category: 'Dashboard Design', gradient: 'gradient-green' },
-    { name: 'Mobile Banking', category: 'App Design', gradient: 'gradient-orange' },
+  const roles = [
+    {
+      icon: Code2,
+      title: 'Full-Stack Engineer',
+      description: 'Building scalable web applications with Next.js and React. Developing full-stack features from database design to user interface implementation.',
+      spotlightColor: 'rgba(59, 130, 246, 0.3)' as const
+    },
+    {
+      icon: Rocket,
+      title: 'DevOps Engineer',
+      description: 'Managing CI/CD pipelines, environment setup, and deployment workflows. Ensuring reliable release cycles with Docker and infrastructure automation.',
+      spotlightColor: 'rgba(168, 85, 247, 0.3)' as const
+    },
+    {
+      icon: Zap,
+      title: 'Automation Developer',
+      description: 'Designing workflow automation with n8n, Google Apps Script, and Python. Streamlining operations and data processing through intelligent automation.',
+      spotlightColor: 'rgba(6, 182, 212, 0.3)' as const
+    },
+    {
+      icon: Palette,
+      title: 'UI/UX Designer',
+      description: 'Crafting intuitive user interfaces with expertise in Figma, Webflow, and Tailwind CSS. Focused on creating seamless user experiences through thoughtful design implementation.',
+      spotlightColor: 'rgba(236, 72, 153, 0.3)' as const
+    },
+    {
+      icon: Briefcase,
+      title: 'Project Manager',
+      description: 'Managing cross-functional projects in Jira, overseeing timelines, deliverables, and task assignments. Ensuring team alignment and successful project execution.',
+      spotlightColor: 'rgba(249, 115, 22, 0.3)' as const
+    },
+    {
+      icon: ClipboardCheck,
+      title: 'QA Tester',
+      description: 'Developing comprehensive test plans and executing functional and regression testing. Maintaining code quality through rigorous bug-tracking workflows.',
+      spotlightColor: 'rgba(34, 197, 94, 0.3)' as const
+    }
   ];
+
+  // Duplicate roles for infinite loop effect
+  const duplicatedRoles = [...roles, ...roles, ...roles];
 
   return (
     <section ref={ref} className="bg-black py-20 overflow-hidden">
-      <motion.div 
-        initial={{ opacity: 0, x: -100 }}
-        animate={isInView ? { opacity: 1, x: 0 } : {}}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="flex gap-8 px-6"
-      >
-        {projects.map((project, index) => (
+      <div className="max-w-full">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="px-6 md:px-12"
+        >
           <motion.div
-            key={index}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ delay: index * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            whileHover={{ scale: 1.05, rotate: 2 }}
-            className="flex-shrink-0 w-64 md:w-80 h-64 md:h-80 rounded-full spotlight relative group cursor-pointer card-3d"
+            drag="x"
+            dragConstraints={{ left: -2500, right: 100 }}
+            dragElastic={0.05}
+            dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
+            className="flex gap-6 cursor-grab active:cursor-grabbing"
           >
-            <div className="card-3d-inner">
-              <div className={`absolute inset-0 ${project.gradient} rounded-full opacity-60 group-hover:opacity-80 transition-all duration-500`} />
-              <motion.div 
-                className="absolute inset-0 flex flex-col items-center justify-center text-center p-6"
-                whileHover={{ scale: 1.1 }}
-              >
-                <p className="text-xs text-white/60 uppercase tracking-wider mb-2">{project.category}</p>
-                <h3 className="text-xl md:text-2xl font-bold text-white">{project.name}</h3>
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileHover={{ opacity: 1 }}
-                className="absolute inset-0 rounded-full border-2 border-white/30"
-              />
-            </div>
+            {duplicatedRoles.map((role, index) => {
+              const Icon = role.icon;
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: (index % 6) * 0.1, duration: 0.6 }}
+                  className="flex-shrink-0 w-96"
+                >
+                  <SpotlightCard spotlightColor={role.spotlightColor} className="h-48">
+                    <div className="flex items-center gap-4 h-full">
+                      <div className="flex-shrink-0">
+                        <Icon className="w-10 h-10 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-white mb-2">{role.title}</h3>
+                        <p className="text-neutral-400 text-sm leading-relaxed">{role.description}</p>
+                      </div>
+                    </div>
+                  </SpotlightCard>
+                </motion.div>
+              );
+            })}
           </motion.div>
-        ))}
-      </motion.div>
+        </motion.div>
+      </div>
     </section>
   );
 }
@@ -353,44 +471,18 @@ function AboutSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const values = [
-    {
-      title: 'Passion',
-      description: 'Driven by a passion for design and technology, I aim to create meaningful digital experiences that elevate brands and improve user experiences.',
-      icon: Sparkles,
-      color: 'from-blue-500 to-purple-500',
-    },
-    {
-      title: 'Innovation',
-      description: 'By exploring new ideas and creative solutions, I craft websites that solve complex challenges and deliver lasting impact.',
-      icon: Sparkles,
-      color: 'from-pink-500 to-orange-500',
-    },
-    {
-      title: 'Growth',
-      description: 'I continually learn and refine my skills to push boundaries and develop higher-quality digital products every day.',
-      icon: Sparkles,
-      color: 'from-green-500 to-cyan-500',
-    },
-  ];
-
   return (
-    <section ref={ref} id="about" className="relative bg-gradient-to-b from-blue-400/20 via-white to-white py-20 overflow-hidden">
-      {/* Background decoration */}
-      <motion.div
-        animate={{ 
-          rotate: [0, 360],
-        }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-        className="absolute top-20 right-20 w-64 h-64 border border-blue-200/50 rounded-full"
-      />
-      <motion.div
-        animate={{ 
-          rotate: [360, 0],
-        }}
-        transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-        className="absolute bottom-20 left-20 w-48 h-48 border border-purple-200/50 rounded-full"
-      />
+    <section ref={ref} id="about" className="relative py-20 overflow-hidden">
+      {/* Falling Pattern Background */}
+      <div className="absolute inset-0 z-0">
+        <FallingPattern
+          color="rgba(168, 85, 247, 0.5)"
+          backgroundColor="rgb(209, 213, 219)"
+          duration={100}
+          blurIntensity="0.5em"
+          density={1}
+        />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <motion.h2 
@@ -399,34 +491,82 @@ function AboutSection() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-3xl md:text-5xl font-bold text-black/90 text-center mb-16 max-w-4xl mx-auto leading-tight"
         >
-          AS A WEB DEVELOPER AND UX/UI DESIGNER, I SPECIALIZE IN BUILDING SOLUTIONS THAT ARE BOTH{' '}
-          <span className="text-gradient">FUNCTIONAL</span> AND <span className="text-gradient-blue">DELIGHTFUL</span>
+          AS A TECHNICAL ASSOCIATE AND FULL-STACK ENGINEER, I SPECIALIZE IN BUILDING SOLUTIONS THAT ARE BOTH{' '}
+          <span className="text-gradient">SCALABLE</span> AND <span className="text-gradient-blue">EFFICIENT</span>
         </motion.h2>
 
         <motion.div 
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="grid md:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 place-items-center max-w-5xl mx-auto"
         >
-          {values.map((value, index) => (
-            <motion.div
-              key={index}
-              variants={fadeInUp}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-black/5 hover:shadow-2xl transition-all duration-500 group"
+          <motion.div variants={fadeInUp}>
+            <ElectricBorder
+              color="#7df9ff"
+              speed={1}
+              chaos={0.12}
+              thickness={2}
+              style={{ borderRadius: 16 }}
             >
-              <motion.div 
-                whileHover={{ rotate: 180 }}
-                transition={{ duration: 0.5 }}
-                className={`w-12 h-12 rounded-xl bg-gradient-to-r ${value.color} flex items-center justify-center mb-4`}
-              >
-                <value.icon className="w-6 h-6 text-white" />
-              </motion.div>
-              <h3 className="text-xl font-bold text-black mb-3 group-hover:text-blue-600 transition-colors">{value.title}</h3>
-              <p className="text-black/60 text-sm leading-relaxed">{value.description}</p>
-            </motion.div>
-          ))}
+              <CardFlip
+                title="Innovation"
+                subtitle="Technology & Automation"
+                description="Driven by a passion for technology and automation, I create efficient systems that streamline workflows."
+                features={[
+                  "Automated Workflows",
+                  "System Integration",
+                  "Process Optimization",
+                  "Modern Tech Stack"
+                ]}
+                accentColor="rgba(125, 249, 255, 0.6)"
+              />
+            </ElectricBorder>
+          </motion.div>
+          <motion.div variants={fadeInUp}>
+            <ElectricBorder
+              color="#ff6b9d"
+              speed={1}
+              chaos={0.12}
+              thickness={2}
+              style={{ borderRadius: 16 }}
+            >
+              <CardFlip
+                title="Excellence"
+                subtitle="Quality & Best Practices"
+                description="Through comprehensive documentation and robust testing, I ensure every system is maintainable and scalable."
+                features={[
+                  "Clean Documentation",
+                  "Robust Testing",
+                  "Code Quality",
+                  "Maintainability"
+                ]}
+                accentColor="rgba(255, 107, 157, 0.6)"
+              />
+            </ElectricBorder>
+          </motion.div>
+          <motion.div variants={fadeInUp}>
+            <ElectricBorder
+              color="#10b981"
+              speed={1}
+              chaos={0.12}
+              thickness={2}
+              style={{ borderRadius: 16 }}
+            >
+              <CardFlip
+                title="Growth"
+                subtitle="Continuous Learning"
+                description="I continuously expand my technical expertise across full-stack development, DevOps, and automation."
+                features={[
+                  "Full-Stack Development",
+                  "DevOps Practices",
+                  "Cloud Technologies",
+                  "Emerging Tools"
+                ]}
+                accentColor="rgba(16, 185, 129, 0.6)"
+              />
+            </ElectricBorder>
+          </motion.div>
         </motion.div>
       </div>
     </section>
@@ -438,22 +578,17 @@ function ToolsStackSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const skills = [
-    { name: 'Figma', category: 'Design Tool', level: 90, icon: 'F' },
-    { name: 'HTML', category: 'Front-end', level: 95, icon: 'H' },
-    { name: 'CSS', category: 'Front-end', level: 90, icon: 'C' },
-    { name: 'JavaScript', category: 'Front-end', level: 90, icon: 'JS' },
-    { name: 'NestJS', category: 'Backend', level: 85, icon: 'N' },
-    { name: 'Django', category: 'Backend', level: 80, icon: 'D' },
-    { name: 'React', category: 'JavaScript Library', level: 95, icon: 'R' },
-    { name: 'Next.js', category: 'Full Stack Framework', level: 90, icon: 'N' },
-    { name: 'Tailwind CSS', category: 'CSS Framework', level: 90, icon: 'T' },
-    { name: 'MUI', category: 'CSS Framework', level: 85, icon: 'M' },
-    { name: 'MySQL', category: 'Database', level: 85, icon: 'My' },
-    { name: 'PostgreSQL', category: 'Database', level: 80, icon: 'P' },
-    { name: 'MS SQL Server', category: 'Database', level: 75, icon: 'MS' },
-    { name: 'GitHub', category: 'Version Control', level: 90, icon: 'GH' },
-    { name: 'GitLab', category: 'Version Control', level: 85, icon: 'GL' },
+  const additionalTools = [
+    { icon: <SiGoogleappsscript className="text-5xl text-white" />, key: 'apps-script' },
+    { icon: <Code2 className="text-5xl text-white" />, key: 'rest-apis' },
+    { icon: <SiCivicrm className="text-5xl text-white" />, key: 'cicd' },
+    { icon: <SiAmazonwebservices className="text-5xl text-white" />, key: 'aws' },
+    { icon: <SiTrello className="text-5xl text-white" />, key: 'trello' },
+    { icon: <SiAsana className="text-5xl text-white" />, key: 'asana' },
+    { icon: <SiDiscord className="text-5xl text-white" />, key: 'discord' },
+    { icon: <Zap className="text-5xl text-white" />, key: 'waha' },
+    { icon: <ClipboardCheck className="text-5xl text-white" />, key: 'manual' },
+    { icon: <Rocket className="text-5xl text-white" />, key: 'regression' },
   ];
 
   return (
@@ -476,57 +611,53 @@ function ToolsStackSection() {
           Technologies I use to bring ideas to life
         </motion.p>
 
-        <motion.div 
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          variants={staggerContainer}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"
+        {/* Icon Cloud */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ delay: 0.3, duration: 0.8 }}
+          className="flex justify-center items-center mb-16"
         >
-          {skills.map((skill, index) => (
-            <motion.div
-              key={index}
-              variants={scaleIn}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-white rounded-xl p-4 flex items-center justify-between group cursor-pointer hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-white font-bold text-sm group-hover:bg-gradient-to-r group-hover:from-blue-500 group-hover:to-purple-500 transition-all">
-                  {skill.icon}
-                </div>
-                <div>
-                  <p className="font-semibold text-black text-sm">{skill.name}</p>
-                  <p className="text-xs text-black/50">{skill.category}</p>
-                </div>
-              </div>
-              <motion.span 
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                className="text-lg font-bold text-black"
-              >
-                {skill.level}%
-              </motion.span>
-            </motion.div>
-          ))}
+          <div className="w-full max-w-3xl h-[500px] flex items-center justify-center">
+            <IconCloudDemo />
+          </div>
         </motion.div>
 
-        {/* Tech Icons Marquee */}
-        <div className="mt-12 border-t border-white/10 pt-8 overflow-hidden">
-          <div className="marquee flex gap-12">
-            {[...Array(2)].map((_, setIndex) => (
-              <div key={setIndex} className="flex gap-12">
-                {skills.map((skill, index) => (
-                  <motion.div
-                    key={`${setIndex}-${index}`}
-                    whileHover={{ scale: 1.2, rotate: 10 }}
-                    className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0 hover:bg-white/20 transition-colors cursor-pointer"
-                  >
-                    {skill.icon}
-                  </motion.div>
-                ))}
-              </div>
-            ))}
+        {/* Additional Tools LogoLoop */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          className="-mt-8 overflow-hidden"
+        >
+          <style>{`
+            .logo-glow svg {
+              filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6)) drop-shadow(0 0 15px rgba(168, 85, 247, 0.3));
+            }
+          `}</style>
+          <div className="logo-glow relative">
+            <motion.div
+              className="flex gap-12 items-center"
+              animate={{
+                x: [0, -1500],
+              }}
+              transition={{
+                x: {
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  duration: 20,
+                  ease: "linear",
+                },
+              }}
+            >
+              {[...additionalTools, ...additionalTools, ...additionalTools].map((tool, index) => (
+                <div key={`${tool.key}-${index}`} className="flex-shrink-0">
+                  {tool.icon}
+                </div>
+              ))}
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -543,37 +674,37 @@ function WorkExperienceSection() {
   const experiences = [
     {
       year: '2025',
-      title: 'Web Developer',
-      company: 'Internship II (SATHAPANA BANK)',
-      period: 'Feb 2025 - Now',
-      description: 'Collaborated with the UX/UI team and implemented designs with Material UI (MUI) to ensure a consistent and user-friendly experience. Developed frontend with Next.js, integrated REST APIs, and assisted backend team using NestJS.',
+      title: 'Full-Stack Engineer & Systems Documentation Lead',
+      company: 'Eterna - Indonesia',
+      period: 'Oct 2025 - Present',
+      description: 'Authored comprehensive system documentation for the Merdeka client project. Contributed to DevOps operations including CI/CD pipeline configuration and deployment management. Developed QA test plans and built full-stack features using Next.js and React.',
       gradient: 'from-blue-500 to-purple-600',
       bgColor: 'bg-blue-950',
     },
     {
-      year: '2024',
-      title: 'Frontend Web Developer / UX UI Designer',
-      company: 'Capstone II (School\'s Project)',
-      period: '3 months',
-      description: 'Designed and developed mobile and web UI using Figma. Created a full-stack solution using Django backend, Flutter mobile app, and React web frontend.',
+      year: '2025',
+      title: 'Machine Learning Developer & Project Manager',
+      company: 'Webstartiom - UK',
+      period: 'Mar 2025 - Oct 2025',
+      description: 'Managed multiple projects in Jira, overseeing timelines and deliverables. Developed and integrated APIs for AI-driven projects. Conducted web data scraping and provided client support while maintaining clear communication.',
       gradient: 'from-orange-500 to-pink-500',
       bgColor: 'bg-orange-950',
     },
     {
       year: '2024',
-      title: 'Web Developer',
-      company: 'Internship I',
-      period: '3 months',
-      description: 'Developed a secure internal system using Django + PostgreSQL. Designed the frontend with Tailwind CSS focusing on clean UI and responsive experience.',
+      title: 'AI Trainer',
+      company: 'Outlier AI - USA',
+      period: 'Nov 2024 - Dec 2025',
+      description: 'Trained AI models by generating, reviewing, and refining datasets. Evaluated AI outputs for accuracy and coherence. Created prompt-response pairs and conducted domain-specific training to improve model performance.',
       gradient: 'from-green-500 to-cyan-500',
       bgColor: 'bg-green-950',
     },
     {
       year: '2023',
-      title: 'Frontend Web Developer',
-      company: 'Capstone I (School\'s Project)',
-      period: '3 months',
-      description: 'Developed a web application using Laravel, Tailwind CSS, and JavaScript. Created a user-friendly interface with responsive design using HTML, CSS, and Tailwind CSS.',
+      title: 'Electroplating Data & Machine Operator',
+      company: 'INPAQ Technology Co., Ltd. - Taiwan',
+      period: 'Sep 2023 - May 2024',
+      description: 'Recorded and maintained daily data of all items processed in the electroplating department. Managed and monitored machines, ensuring proper operation. Conducted routine chemical level checks and maintained operational efficiency.',
       gradient: 'from-cyan-500 to-blue-500',
       bgColor: 'bg-cyan-950',
     },
@@ -656,7 +787,22 @@ function WorkExperienceSection() {
                       
                       {/* Skills tags */}
                       <div className="flex flex-wrap gap-2 mt-6">
-                        {['Next.js', 'NestJS', 'MUI', 'REST API'].map((skill, i) => (
+                        {index === 0 && ['Next.js', 'React', 'DevOps', 'CI/CD', 'QA'].map((skill, i) => (
+                          <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
+                            {skill}
+                          </span>
+                        ))}
+                        {index === 1 && ['Jira', 'API Development', 'Python', 'Web Scraping'].map((skill, i) => (
+                          <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
+                            {skill}
+                          </span>
+                        ))}
+                        {index === 2 && ['AI Training', 'Data Annotation', 'Machine Learning'].map((skill, i) => (
+                          <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
+                            {skill}
+                          </span>
+                        ))}
+                        {index === 3 && ['Data Management', 'Quality Control', 'Process Monitoring'].map((skill, i) => (
                           <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
                             {skill}
                           </span>
@@ -693,12 +839,12 @@ function RecentWorksSection() {
   const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
 
   const projects = [
-    { name: 'Digital Agency\'s Website', category: 'Website Design', tags: ['Figma'], gradient: 'gradient-blue' },
-    { name: 'Software Agency\'s Website', category: 'Website Design', tags: ['Figma'], gradient: 'gradient-cyan' },
-    { name: 'Earbuds Lending Website', category: 'Website Design', tags: ['Figma'], gradient: 'gradient-purple' },
-    { name: 'Banking Dashboard Design', category: 'Website Design', tags: ['Figma'], gradient: 'gradient-green' },
-    { name: 'Explorify Mobile App Design', category: 'Mobile App Design', tags: ['Figma', 'Django', 'Flutter'], gradient: 'gradient-orange' },
-    { name: 'Explorify Lending Website', category: 'Website Design', tags: ['Figma', 'Django', 'React Js'], gradient: 'gradient-pink' },
+    { name: 'Merdeka Client System', category: 'Full-Stack Development', tags: ['Next.js', 'React', 'DevOps'], gradient: 'gradient-blue' },
+    { name: 'Automation Workflows', category: 'Process Automation', tags: ['n8n', 'Apps Script'], gradient: 'gradient-cyan' },
+    { name: 'AI-Driven API Integration', category: 'Backend Development', tags: ['Python', 'REST APIs'], gradient: 'gradient-purple' },
+    { name: 'System Architecture Documentation', category: 'Technical Documentation', tags: ['Architecture Design', 'DevOps'], gradient: 'gradient-green' },
+    { name: 'CI/CD Pipeline Setup', category: 'DevOps', tags: ['Docker', 'GitHub', 'CI/CD'], gradient: 'gradient-orange' },
+    { name: 'QA Test Automation', category: 'Quality Assurance', tags: ['Testing', 'Bug Tracking'], gradient: 'gradient-pink' },
   ];
 
   return (
@@ -769,16 +915,10 @@ function RecentWorksSection() {
           <div className="mt-4">
             <div className={`h-48 ${selectedProject?.gradient} rounded-xl mb-6 opacity-60`} />
             <p className="text-black/70 leading-relaxed">
-              The website was developed using {selectedProject?.tags.join(', ')}, emphasizing problem-solving 
-              and solution design. Content was generated and refined with the help of ChatGPT to enhance 
-              clarity and user experience.
+              This project was developed using {selectedProject?.tags.join(', ')}, focusing on scalability, 
+              maintainability, and optimal performance. The solution was designed to meet client requirements 
+              while ensuring robust technical architecture and comprehensive documentation.
             </p>
-            <a 
-              href="#" 
-              className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mt-4 font-medium"
-            >
-              Figma Link <ArrowUpRight className="w-4 h-4" />
-            </a>
           </div>
         </DialogContent>
       </Dialog>
@@ -796,28 +936,28 @@ function ServicesSection() {
 
   const services = [
     {
-      title: 'WEB DEVELOPMENT',
-      description: 'I build responsive and modern websites using HTML, CSS, JavaScript, React, Next.js, and Tailwind CSS.',
-      includes: ['Business Sites', 'Portfolios', 'Landing Pages', 'Product Pages'],
+      title: 'FULL-STACK DEVELOPMENT',
+      description: 'I build robust and scalable web applications using modern frameworks like React, Next.js, and various backend technologies.',
+      includes: ['Web Applications', 'REST APIs', 'Frontend Development', 'Backend Integration', 'Database Design'],
       gradient: 'from-purple-500 to-pink-500',
       bgColor: 'bg-purple-950',
       icon: '</>',
     },
     {
-      title: 'UX/UI DESIGN',
-      description: 'I create intuitive and aesthetically pleasing digital interfaces grounded in user-centered design principles.',
-      includes: ['Full Website UI', 'Landing Pages', 'Wireframes', 'Prototypes', 'Style Guides'],
+      title: 'AUTOMATION & WORKFLOW DESIGN',
+      description: 'I create efficient automation solutions using n8n, Google Apps Script, and Python to streamline business processes and improve productivity.',
+      includes: ['Process Automation', 'Workflow Integration', 'Data Processing', 'API Connectivity', 'System Integration'],
       gradient: 'from-cyan-500 to-blue-500',
       bgColor: 'bg-cyan-950',
-      icon: '🎨',
+      icon: '⚡',
     },
     {
-      title: 'WEB / APP DESIGN',
-      description: 'I deliver polished, modern mobile application designs for both iOS and Android platforms using Figma.',
-      includes: ['App Screens', 'User Flows', 'UI Kits', 'Interactive Prototypes'],
+      title: 'DEVOPS & SYSTEMS DOCUMENTATION',
+      description: 'I provide comprehensive DevOps solutions including CI/CD pipeline management, infrastructure setup, and detailed system documentation for team alignment.',
+      includes: ['CI/CD Pipelines', 'System Architecture', 'Technical Documentation', 'Environment Setup', 'Quality Assurance'],
       gradient: 'from-orange-500 to-red-500',
       bgColor: 'bg-orange-950',
-      icon: '📱',
+      icon: '🛠️',
     },
   ];
 
@@ -986,14 +1126,14 @@ function ContactSection() {
             </h2>
             <p className="text-white/60 mb-8 max-w-md leading-relaxed">
               Thank you for visiting my portfolio. I'm always open to discussing new opportunities, 
-              potential collaborations, or challenging projects that align with my skills!
+              collaborations, or exciting projects that align with my technical expertise in full-stack development, automation, and DevOps!
             </p>
             <motion.div 
               whileHover={{ x: 10 }}
               className="flex items-center gap-3 text-white/60 cursor-pointer"
             >
               <span className="text-xl">✉</span>
-              <span className="line-reveal">chhenglyseak@gmail.com</span>
+              <span className="line-reveal">charleneathena@gmail.com</span>
             </motion.div>
           </motion.div>
 
@@ -1091,14 +1231,21 @@ function FooterSection() {
             <div>
               <p className="text-sm text-black/40 uppercase tracking-wider mb-4">Social</p>
               <ul className="space-y-2">
-                {['LinkedIn', 'Behance', 'Dribbble', 'Tiktok'].map((item) => (
-                  <motion.li 
-                    key={item}
-                    whileHover={{ x: 5 }}
-                  >
-                    <a href="#" className="text-black hover:text-blue-600 transition-colors underline">{item}</a>
-                  </motion.li>
-                ))}
+                <motion.li 
+                  whileHover={{ x: 5 }}
+                >
+                  <a href="https://www.linkedin.com/in/charlene-athena-0316b3354" target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-600 transition-colors underline">LinkedIn</a>
+                </motion.li>
+                <motion.li 
+                  whileHover={{ x: 5 }}
+                >
+                  <a href="https://github.com/lilyofthevaleys" target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-600 transition-colors underline">GitHub</a>
+                </motion.li>
+                <motion.li 
+                  whileHover={{ x: 5 }}
+                >
+                  <a href="https://www.instagram.com/tututunaaa?igsh=MWZqcHYyOW82MjQyMg%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" className="text-black hover:text-blue-600 transition-colors underline">Instagram</a>
+                </motion.li>
               </ul>
             </div>
           </div>
@@ -1114,7 +1261,7 @@ function FooterSection() {
             whileHover={{ scale: 1.02 }}
             className="text-[12vw] md:text-[15vw] font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 leading-none tracking-tighter cursor-default"
           >
-            Chhongly
+            Athena
           </motion.h2>
         </motion.div>
 
@@ -1124,7 +1271,7 @@ function FooterSection() {
           transition={{ delay: 0.5, duration: 0.6 }}
           className="flex flex-col md:flex-row justify-between items-center gap-4 mt-8 pt-8 border-t border-black/10"
         >
-          <p className="text-sm text-black/40">© 2025 by Chhongly Seak.</p>
+          <p className="text-sm text-black/40">© 2026 by Charlene Athena.</p>
           <motion.a 
             href="#" 
             whileHover={{ x: 5 }}

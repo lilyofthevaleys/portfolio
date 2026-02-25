@@ -257,3 +257,15 @@ section {
   opacity: 0.3;
   pointer-events: none;
 }
+
+/* Letter hover effect */
+.letter {
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, color;
+}
+
+.letter:hover {
+  transform-origin: center;
+}
