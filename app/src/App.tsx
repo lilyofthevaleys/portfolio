@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Flower2, Code2, Rocket, Zap, Palette, Briefcase, ClipboardCheck, Wrench } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Code2, Rocket, Zap, Palette, Briefcase, ClipboardCheck, Wrench } from 'lucide-react';
 import { SiGoogleappsscript, SiAmazonwebservices, SiTrello, SiAsana, SiDiscord, SiCivicrm } from 'react-icons/si';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
