@@ -269,3 +269,37 @@ section {
 .letter:hover {
   transform-origin: center;
 }
+/* Performance optimizations for M1/low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* GPU acceleration for animated elements */
+.float,
+.float-delayed,
+.float-slow,
+.pulse-glow,
+.marquee,
+.reveal-up.visible,
+.letter {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Reduce animation for low-memory devices */
+@supports (backdrop-filter: blur(1px)) {
+  .glass-card {
+    backdrop-filter: blur(8px);
+  }
+}

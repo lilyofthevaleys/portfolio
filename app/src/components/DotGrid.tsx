@@ -1,11 +1,12 @@
 'use client';
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import { gsap } from 'gsap';
+import { usePerformance } from '@/hooks/use-performance';
 
 const throttle = (func: (...args: any[]) => void, limit: number) => {
   let lastCall = 0;
   return function (this: any, ...args: any[]) {
-    const now = performance.now();
+    const now = globalThis.performance.now();
     if (now - lastCall >= limit) {
       lastCall = now;
       func.apply(this, args);
@@ -62,6 +63,8 @@ const DotGrid: React.FC<DotGridProps> = ({
   className = '',
   style
 }) => {
+  const performance = usePerformance();
+  
   const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dotsRef = useRef<Dot[]>([]);
@@ -127,7 +130,7 @@ const DotGrid: React.FC<DotGridProps> = ({
   }, [dotSize, gap]);
 
   useEffect(() => {
-    if (!circlePath) return;
+    if (!circlePath || !performance.canAnimateDotGrid) return;
 
     let rafId: number;
     const proxSq = proximity * proximity;
@@ -189,7 +192,7 @@ const DotGrid: React.FC<DotGridProps> = ({
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      const now = performance.now();
+      const now = globalThis.performance.now();
       const pr = pointerRef.current;
       const dt = pr.lastTime ? now - pr.lastTime : 16;
       const dx = e.clientX - pr.lastX;
@@ -283,7 +286,7 @@ const DotGrid: React.FC<DotGridProps> = ({
       window.removeEventListener('mousemove', throttledMove);
       window.removeEventListener('click', onClick);
     };
-  }, [maxSpeed, speedTrigger, proximity, resistance, returnDuration, shockRadius, shockStrength]);
+  }, [maxSpeed, speedTrigger, proximity, resistance, returnDuration, shockRadius, shockStrength, performance.canAnimateDotGrid]);
 
   return (
     <section className={`p-4 flex items-center justify-center h-full w-full relative ${className}`} style={style}>

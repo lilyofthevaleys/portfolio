@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Menu, X, ArrowUpRight, Sparkles, Flower2, Code2, Rocket, Zap, Palette, Briefcase, ClipboardCheck } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Flower2, Code2, Rocket, Zap, Palette, Briefcase, ClipboardCheck, Wrench } from 'lucide-react';
 import { SiGoogleappsscript, SiAmazonwebservices, SiTrello, SiAsana, SiDiscord, SiCivicrm } from 'react-icons/si';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -16,15 +16,23 @@ import { FallingPattern } from '@/components/FallingPattern';
 import CardFlip from '@/components/CardFlip';
 import { IconCloudDemo } from '@/components/IconCloudDemo';
 import { Timeline } from '@/components/Timeline';
+import Grainient from '@/components/Grainient';
+import GridScan from '@/components/GridScan';
 import eternaLogo from '@/assets/lanyard/images/eterna.png';
 import webstartiomLogo from '@/assets/lanyard/images/webstartiom.png';
 import outlierLogo from '@/assets/lanyard/images/outlier.png';
 import inpaqLogo from '@/assets/lanyard/images/inpaq.png';
-import njcpImage from '@/assets/lanyard/images/2304x1296.webp';
-import sionImage from '@/assets/lanyard/images/further_front.jpg';
-import quantumImage from '@/assets/lanyard/images/park_cam-23-1-scaled.jpg';
-import terraImage from '@/assets/lanyard/images/mineral-processing-facility.jpeg';
-import merdekaImage from '@/assets/lanyard/images/830266_1200.jpg';
+
+const njcpImage = new URL('./assets/lanyard/images/2304x1296.webp', import.meta.url).href;
+const sionImage = new URL('./assets/lanyard/images/further_front.jpg', import.meta.url).href;
+const quantumImage = new URL('./assets/lanyard/images/park_cam-23-1-scaled.jpg', import.meta.url).href;
+const terraImage = new URL('./assets/lanyard/images/mineral-processing-facility.jpeg', import.meta.url).href;
+const merdekaImage = new URL('./assets/lanyard/images/830266_1200.jpg', import.meta.url).href;
+const decisionImage = new URL('./assets/lanyard/images/WhatsApp Image 2026-02-26 at 08.36.15.jpeg', import.meta.url).href;
+
+const fullStackImage = new URL('./assets/lanyard/images/Untitled design-3.png', import.meta.url).href;
+const automationImage = new URL('./assets/lanyard/images/Untitled design.png', import.meta.url).href;
+const devopsImage = new URL('./assets/lanyard/images/Untitled design-2.png', import.meta.url).href;
 
 // Animation variants with proper types
 const fadeInUp: Variants = {
@@ -44,15 +52,6 @@ const staggerContainer: Variants = {
       staggerChildren: 0.1,
       delayChildren: 0.2
     }
-  }
-};
-
-const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { 
-    opacity: 1, 
-    scale: 1,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] as const }
   }
 };
 
@@ -177,9 +176,6 @@ function Navigation({ onNavigate }: { onNavigate: (section: string) => void }) {
 // Hero Section with parallax flowers
 function HeroSection() {
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, -100]);
-  const y2 = useTransform(scrollY, [0, 500], [0, -150]);
-  const y3 = useTransform(scrollY, [0, 500], [0, -80]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const scale = useTransform(scrollY, [0, 500], [1, 0.9]);
   
@@ -813,7 +809,7 @@ function RecentWorksSection() {
     { name: 'Quantum Luminous', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-purple', link: 'https://quantum-luminous.webflow.io/', image: quantumImage },
     { name: 'Terra Mineral Nusantara', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-green', link: 'https://terra-mineral-nusantara.webflow.io/', image: terraImage },
     { name: 'Merdeka Client System', category: 'Project Management & QA', tags: ['System Documentation', 'QA Testing', 'Project Manager'], gradient: 'gradient-orange', link: 'https://merdeka.app/login', image: merdekaImage },
-    { name: 'CI/CD Pipeline', category: 'DevOps', tags: ['Docker', 'GitHub Actions', 'CI/CD'], gradient: 'gradient-pink' },
+    { name: 'Decision Educational Game', category: 'Frontend Development & Architecture', tags: ['Frontend Dev', 'Architecture Design', 'UAT'], gradient: 'gradient-pink', link: 'https://decision-educationalgame-xryd.vercel.app', image: decisionImage },
   ];
 
   return (
@@ -907,6 +903,8 @@ function RecentWorksSection() {
                 ? 'Led the UI/UX design, created 3D models, and conducted User Acceptance Testing for Terra Mineral Nusantara. The project delivers an industrial-grade web experience with detailed 3D visualizations and comprehensive quality assurance.'
                 : selectedProject?.name === 'Merdeka Client System'
                 ? 'Managed system documentation, conducted comprehensive QA testing, and served as Project Manager for Merdeka Client System. The project ensures high-quality deliverables through meticulous documentation, rigorous testing protocols, and effective project coordination.'
+                : selectedProject?.name === 'Decision Educational Game'
+                ? 'Built the entire frontend application with comprehensive architecture design and conducted User Acceptance Testing for Decision Educational Game. The project delivers an engaging educational game experience with intuitive interfaces, scalable system design, and rigorous quality assurance.'
                 : `This project was developed using ${selectedProject?.tags.join(', ')}, focusing on scalability, maintainability, and optimal performance. The solution was designed to meet client requirements while ensuring robust technical architecture and comprehensive documentation.`
               }
             </p>
@@ -942,7 +940,8 @@ function ServicesSection() {
       includes: ['Web Applications', 'REST APIs', 'Frontend Development', 'Backend Integration', 'Database Design'],
       gradient: 'from-purple-500 to-pink-500',
       bgColor: 'bg-purple-950',
-      icon: '</>',
+      icon: Code2,
+      image: fullStackImage,
     },
     {
       title: 'AUTOMATION & WORKFLOW DESIGN',
@@ -950,7 +949,8 @@ function ServicesSection() {
       includes: ['Process Automation', 'Workflow Integration', 'Data Processing', 'API Connectivity', 'System Integration'],
       gradient: 'from-cyan-500 to-blue-500',
       bgColor: 'bg-cyan-950',
-      icon: '⚡',
+      icon: Zap,
+      image: automationImage,
     },
     {
       title: 'DEVOPS & SYSTEMS DOCUMENTATION',
@@ -958,12 +958,40 @@ function ServicesSection() {
       includes: ['CI/CD Pipelines', 'System Architecture', 'Technical Documentation', 'Environment Setup', 'Quality Assurance'],
       gradient: 'from-orange-500 to-red-500',
       bgColor: 'bg-orange-950',
-      icon: '🛠️',
+      icon: Wrench,
+      image: devopsImage,
     },
   ];
 
   return (
     <section ref={containerRef} id="services" className="relative bg-black" style={{ height: `${(services.length + 1) * 100}vh` }}>
+      {/* Grainient Background */}
+      <div className="absolute inset-0 z-0">
+        <Grainient
+          color1="#d357fe"
+          color2="#2e073e"
+          color3="#000000"
+          timeSpeed={0.25}
+          colorBalance={0.4}
+          warpStrength={1}
+          warpFrequency={5}
+          warpSpeed={2}
+          warpAmplitude={50}
+          blendAngle={0}
+          blendSoftness={0.05}
+          rotationAmount={500}
+          noiseScale={2}
+          grainAmount={0.1}
+          grainScale={2}
+          grainAnimated={false}
+          contrast={1.5}
+          gamma={1}
+          saturation={1}
+          centerX={0}
+          centerY={0}
+          zoom={0.9}
+        />
+      </div>
       {/* Section Header - Sticky */}
       <div className="sticky top-0 h-screen flex flex-col justify-start pt-20 z-0">
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
@@ -1025,7 +1053,7 @@ function ServicesSection() {
                     <div>
                       {/* Icon */}
                       <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} shadow-lg mb-6`}>
-                        <span className="text-2xl">{service.icon}</span>
+                        <service.icon className="w-8 h-8 text-white" />
                       </div>
                       
                       <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">{service.title}</h3>
@@ -1054,32 +1082,20 @@ function ServicesSection() {
                     {/* Right - Visual */}
                     <div className="relative">
                       <motion.div 
-                        whileHover={{ scale: 1.02, rotate: 1 }}
+                        whileHover={{ scale: 1.02, y: -5 }}
                         transition={{ duration: 0.3 }}
-                        className={`aspect-square rounded-2xl bg-gradient-to-br ${service.gradient} opacity-40 relative overflow-hidden`}
+                        className="relative rounded-2xl overflow-hidden shadow-2xl"
                       >
-                        {/* Animated circles */}
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                          className="absolute inset-0 flex items-center justify-center"
-                        >
-                          <div className="w-32 h-32 border-2 border-white/20 rounded-full" />
-                        </motion.div>
-                        <motion.div
-                          animate={{ rotate: -360 }}
-                          transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                          className="absolute inset-0 flex items-center justify-center"
-                        >
-                          <div className="w-48 h-48 border border-white/10 rounded-full" />
-                        </motion.div>
-                        <motion.div
-                          animate={{ scale: [1, 1.2, 1] }}
-                          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                          className="absolute inset-0 flex items-center justify-center"
-                        >
-                          <div className="w-16 h-16 bg-white/10 rounded-full" />
-                        </motion.div>
+                        {/* Image container with gradient overlay */}
+                        <div className="relative aspect-square">
+                          <img 
+                            src={service.image} 
+                            alt={service.title}
+                            className="w-full h-full object-cover rounded-2xl"
+                          />
+                          {/* Subtle gradient overlay */}
+                          <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-20 mix-blend-overlay rounded-2xl`} />
+                        </div>
                       </motion.div>
                     </div>
                   </div>
@@ -1105,9 +1121,24 @@ function ContactSection() {
 
   return (
     <section ref={ref} id="contact" className="bg-black py-20 relative overflow-hidden">
+      {/* GridScan Background */}
+      <div className="absolute inset-0 z-0">
+        <GridScan
+          sensitivity={0.55}
+          lineThickness={1}
+          linesColor="#392e4e"
+          gridScale={0.1}
+          scanColor="#FF9FFC"
+          scanOpacity={0.4}
+          enablePost
+          bloomIntensity={0.6}
+          chromaticAberration={0.002}
+          noiseIntensity={0.01}
+        />
+      </div>
       {/* Background gradient orbs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-[100px]" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-br from-pink-500/20 to-orange-500/20 rounded-full blur-[100px]" />
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-[100px] z-[1]" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-br from-pink-500/20 to-orange-500/20 rounded-full blur-[100px] z-[1]" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12">
@@ -1258,12 +1289,44 @@ function FooterSection() {
           transition={{ delay: 0.3, duration: 0.8 }}
           className="relative"
         >
-          <motion.h2 
-            whileHover={{ scale: 1.02 }}
-            className="text-[12vw] md:text-[15vw] font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 leading-none tracking-tighter cursor-default"
-          >
-            Athena
-          </motion.h2>
+          <h2 className="text-[12vw] md:text-[15vw] font-black leading-none tracking-tighter cursor-default">
+            {'Athena'.split('').map((char, index) => {
+              const gradientColors = ['#2563eb', '#3b82f6', '#60a5fa', '#818cf8', '#a78bfa', '#9333ea'];
+              const defaultColor = gradientColors[index % gradientColors.length];
+              
+              return (
+                <span
+                  key={index}
+                  className="letter inline-block"
+                  onMouseEnter={(e) => {
+                    const colors = ['#60a5fa', '#a78bfa', '#f472b6', '#fbbf24', '#34d399', '#f87171'];
+                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                    gsap.to(e.currentTarget, {
+                      color: randomColor,
+                      textShadow: `0 0 30px ${randomColor}, 0 0 60px ${randomColor}`,
+                      scale: 1.1,
+                      y: -10,
+                      duration: 0.3,
+                      ease: 'power2.out'
+                    });
+                  }}
+                  onMouseLeave={(e) => {
+                    gsap.to(e.currentTarget, {
+                      color: defaultColor,
+                      textShadow: 'none',
+                      scale: 1,
+                      y: 0,
+                      duration: 0.5,
+                      ease: 'power2.inOut'
+                    });
+                  }}
+                  style={{ display: 'inline-block', color: defaultColor }}
+                >
+                  {char}
+                </span>
+              );
+            })}
+          </h2>
         </motion.div>
 
         <motion.div 
