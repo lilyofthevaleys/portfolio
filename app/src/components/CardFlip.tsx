@@ -1,25 +1,15 @@
 "use client";
 
-/**
- * @author: @dorianbaffier
- * @description: Card Flip
- * @version: 1.0.0
- * @date: 2025-06-26
- * @license: MIT
- * @website: https://kokonutui.com
- * @github: https://github.com/kokonut-labs/kokonutui
- */
-
-import { ArrowRight, Repeat2 } from "lucide-react";
+import { ArrowRight, Repeat2, Lightbulb, Award, TrendingUp } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 
 export interface CardFlipProps {
   title?: string;
   subtitle?: string;
   description?: string;
   features?: string[];
-  accentColor?: string;
+  iconType?: "innovation" | "excellence" | "growth";
+  circleColor?: string;
 }
 
 export default function CardFlip({
@@ -27,80 +17,123 @@ export default function CardFlip({
   subtitle = "Explore the fundamentals",
   description = "Dive deep into the world of modern UI/UX design.",
   features = ["UI/UX", "Modern Design", "Tailwind CSS", "Kokonut UI"],
-  accentColor = "rgba(255, 165, 0, 0.5)",
+  iconType = "innovation",
+  circleColor = "rgba(251, 146, 60, 0.3)",
 }: CardFlipProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
+  const getIcon = () => {
+    switch (iconType) {
+      case "innovation":
+        return Lightbulb;
+      case "excellence":
+        return Award;
+      case "growth":
+        return TrendingUp;
+      default:
+        return Lightbulb;
+    }
+  };
+
+  const Icon = getIcon();
+
   return (
     <div
-      className="group relative h-[380px] w-[280px] [perspective:2000px]"
+      style={{ height: "340px", width: "280px", perspective: "2000px", zIndex: 3, position: "relative" }}
       onMouseEnter={() => setIsFlipped(true)}
       onMouseLeave={() => setIsFlipped(false)}
     >
       <div
-        className={cn(
-          "relative h-full w-full",
-          "[transform-style:preserve-3d]",
-          "transition-all duration-700",
-          isFlipped
-            ? "[transform:rotateY(180deg)]"
-            : "[transform:rotateY(0deg)]"
-        )}
+        style={{
+          transformStyle: "preserve-3d",
+          transition: "transform 0.7s",
+          transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+          position: "relative",
+          height: "100%",
+          width: "100%",
+        }}
       >
+        {/* Front of card */}
         <div
-          className={cn(
-            "absolute inset-0 h-full w-full",
-            "[backface-visibility:hidden] [transform:rotateY(0deg)]",
-            "overflow-hidden rounded-2xl",
-            "bg-zinc-50 dark:bg-zinc-900",
-            "border border-zinc-200 dark:border-zinc-800/50",
-            "shadow-xs dark:shadow-lg",
-            "transition-all duration-700",
-            "group-hover:shadow-lg dark:group-hover:shadow-xl",
-            isFlipped ? "opacity-0" : "opacity-100"
-          )}
+          style={{
+            position: "absolute",
+            inset: 0,
+            height: "100%",
+            width: "100%",
+            backfaceVisibility: "hidden",
+            transform: "rotateY(0deg)",
+            overflow: "hidden",
+            borderRadius: "16px",
+            backgroundColor: "#fafafa",
+            border: "1px solid #e4e4e7",
+            boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+          }}
+          className="dark:bg-zinc-900 dark:border-zinc-800/50 dark:shadow-lg"
         >
-          <div className="relative h-full overflow-hidden bg-gradient-to-b from-white via-white to-zinc-50 dark:from-zinc-900 dark:to-black">
-            <div className="absolute inset-0 flex items-start justify-center pt-24">
-              <div className="relative flex h-[100px] w-[200px] items-center justify-center">
-                {[...Array(10)].map((_, i) => (
-                  <div
-                    className={cn(
-                      "absolute h-[50px] w-[50px]",
-                      "rounded-[140px]",
-                      "animate-[scale_3s_linear_infinite]",
-                      "opacity-0",
-                      "group-hover:animate-[scale_2s_linear_infinite]"
-                    )}
-                    key={i}
-                    style={{
-                      animationDelay: `${i * 0.3}s`,
-                      boxShadow: `0 0 50px ${accentColor}`,
-                    }}
-                  />
-                ))}
+          {/* Animated icon background */}
+          <div
+            style={{ position: "relative", height: "100%", width: "100%" }}
+            className="bg-gradient-to-b from-zinc-100 to-white dark:from-zinc-900 dark:to-black"
+          >
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div
+                style={{
+                  position: "relative",
+                  marginTop: "-20px",
+                }}
+              >
+                {/* Glint overlay */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: -20,
+                    background: "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)",
+                    animation: "glint 3s ease-in-out infinite",
+                    opacity: 0.6,
+                  }}
+                />
+                <Icon
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    color: circleColor,
+                    filter: `drop-shadow(0 0 15px ${circleColor})`,
+                  }}
+                  strokeWidth={1.5}
+                />
               </div>
             </div>
           </div>
 
-          <div className="absolute right-0 bottom-0 left-0 p-5">
-            <div className="flex items-center justify-between gap-3">
-              <div className="space-y-1.5">
-                <h3 className="font-semibold text-lg text-zinc-900 leading-snug tracking-tighter transition-all duration-500 ease-out-expo group-hover:translate-y-[-4px] dark:text-white">
+          {/* Content */}
+          <div style={{ position: "absolute", right: 0, bottom: 0, left: 0, padding: "20px 20px 24px 20px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1, minWidth: 0 }}>
+                <h3
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "18px",
+                    color: "#18181b",
+                    lineHeight: "1.4",
+                    letterSpacing: "-0.025em",
+                  }}
+                  className="dark:text-white"
+                >
                   {title}
                 </h3>
-                <p className="line-clamp-2 text-sm text-zinc-600 tracking-tight transition-all delay-[50ms] duration-500 ease-out-expo group-hover:translate-y-[-4px] dark:text-zinc-200">
+                <p
+                  style={{
+                    fontSize: "14px",
+                    color: "#52525b",
+                    lineHeight: "1.4",
+                  }}
+                  className="dark:text-zinc-200"
+                >
                   {subtitle}
                 </p>
               </div>
-              <div className="group/icon relative">
-                <div
-                  className={cn(
-                    "absolute inset-[-8px] rounded-lg transition-opacity duration-300",
-                    "bg-gradient-to-br from-orange-500/20 via-orange-500/10 to-transparent"
-                  )}
-                />
-                <Repeat2 className="group-hover/icon:-rotate-12 relative z-10 h-4 w-4 text-orange-500 transition-transform duration-300 group-hover/icon:scale-110" />
+              <div style={{ position: "relative", flexShrink: 0 }}>
+                <Repeat2 style={{ height: "16px", width: "16px", color: "#f97316" }} />
               </div>
             </div>
           </div>
@@ -108,43 +141,61 @@ export default function CardFlip({
 
         {/* Back of card */}
         <div
-          className={cn(
-            "absolute inset-0 h-full w-full",
-            "[backface-visibility:hidden] [transform:rotateY(180deg)]",
-            "rounded-2xl p-6",
-            "bg-gradient-to-b from-zinc-100 to-white dark:from-zinc-900 dark:to-black",
-            "border border-zinc-200 dark:border-zinc-800",
-            "shadow-xs dark:shadow-lg",
-            "flex flex-col",
-            "transition-all duration-700",
-            "group-hover:shadow-lg dark:group-hover:shadow-xl",
-            isFlipped ? "opacity-100" : "opacity-0"
-          )}
+          style={{
+            position: "absolute",
+            inset: 0,
+            height: "100%",
+            width: "100%",
+            backfaceVisibility: "hidden",
+            transform: "rotateY(180deg)",
+            borderRadius: "16px",
+            padding: "24px",
+            background: "linear-gradient(to bottom, #f4f4f5, #ffffff)",
+            border: "1px solid #e4e4e7",
+            boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+            display: "flex",
+            flexDirection: "column",
+          }}
+          className="dark:from-zinc-900 dark:to-black dark:border-zinc-800 dark:shadow-lg"
         >
-          <div className="flex-1 space-y-6">
-            <div className="space-y-2">
-              <h3 className="font-semibold text-lg text-zinc-900 leading-snug tracking-tight transition-all duration-500 ease-out-expo group-hover:translate-y-[-2px] dark:text-white">
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "16px", overflow: "hidden" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <h3
+                style={{
+                  fontWeight: 600,
+                  fontSize: "18px",
+                  color: "#18181b",
+                  lineHeight: "1.3",
+                  letterSpacing: "-0.025em",
+                }}
+                className="dark:text-white"
+              >
                 {title}
               </h3>
-              <p className="text-sm text-zinc-600 tracking-tight transition-all duration-500 ease-out-expo group-hover:translate-y-[-2px] dark:text-zinc-400 leading-relaxed">
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#52525b",
+                  lineHeight: "1.4",
+                }}
+                className="dark:text-zinc-400"
+              >
                 {description}
               </p>
             </div>
 
-            <div className="space-y-2.5">
+            <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
               {features.map((feature, index) => (
                 <div
-                  className="flex items-center gap-2 text-sm text-zinc-700 transition-all duration-500 dark:text-zinc-300"
                   key={feature}
+                  className="flex items-center gap-2 text-sm text-zinc-700 transition-all duration-500 dark:text-zinc-300"
                   style={{
-                    transform: isFlipped
-                      ? "translateX(0)"
-                      : "translateX(-10px)",
+                    transform: isFlipped ? "translateX(0)" : "translateX(-10px)",
                     opacity: isFlipped ? 1 : 0,
                     transitionDelay: `${index * 100 + 200}ms`,
                   }}
                 >
-                  <ArrowRight className="h-3 w-3 text-orange-500" />
+                  <ArrowRight className="h-3 w-3 text-orange-500 flex-shrink-0" />
                   <span>{feature}</span>
                 </div>
               ))}
@@ -154,21 +205,15 @@ export default function CardFlip({
       </div>
 
       <style>{`
-                @keyframes scale {
-                    0% {
-                        transform: scale(2);
-                        opacity: 0;
-                    }
-                    50% {
-                        transform: translate(0px, -5px) scale(1);
-                        opacity: 1;
-                    }
-                    100% {
-                        transform: translate(0px, 5px) scale(0.1);
-                        opacity: 0;
-                    }
-                }
-            `}</style>
+        @keyframes glint {
+          0% {
+            transform: translateY(-100%);
+          }
+          100% {
+            transform: translateY(200%);
+          }
+        }
+      `}</style>
     </div>
   );
 }

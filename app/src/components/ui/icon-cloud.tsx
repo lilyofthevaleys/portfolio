@@ -7,7 +7,6 @@ import {
   renderSimpleIcon,
   fetchSimpleIcons,
 } from "react-icon-cloud";
-import { usePerformance } from "@/hooks/use-performance";
 
 export const cloudProps: Omit<ICloud, "children"> = {
   containerProps: {
@@ -42,19 +41,7 @@ export type DynamicCloudProps = {
 type IconData = Awaited<ReturnType<typeof fetchSimpleIcons>>;
 
 export function IconCloud({ iconSlugs }: DynamicCloudProps) {
-  const performance = usePerformance();
   const [data, setData] = useState<IconData | null>(null);
-
-  // Adjust cloud props based on performance capabilities
-  const adjustedCloudProps = useMemo(() => ({
-    ...cloudProps,
-    options: {
-      ...cloudProps.options,
-      maxSpeed: performance.isLowEndDevice ? 0.01 : 0.04,
-      minSpeed: performance.isLowEndDevice ? 0.005 : 0.02,
-      wheelZoom: !performance.isLowEndDevice,
-    }
-  }), [performance.isLowEndDevice]);
 
   useEffect(() => {
     fetchSimpleIcons({ slugs: iconSlugs }).then(setData);
@@ -78,7 +65,7 @@ export function IconCloud({ iconSlugs }: DynamicCloudProps) {
   }, [data]);
 
   return (
-    <Cloud {...adjustedCloudProps}>
+    <Cloud {...cloudProps}>
       {renderedIcons}
     </Cloud>
   );

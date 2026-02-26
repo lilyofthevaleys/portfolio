@@ -75,15 +75,6 @@
     pointer-events: none;
   }
   
-  .marquee {
-    animation: marquee 25s linear infinite;
-  }
-  
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  
   .float {
     animation: float 6s ease-in-out infinite;
   }
@@ -91,6 +82,24 @@
   @keyframes float {
     0%, 100% { transform: translateY(0) rotate(0deg); }
     50% { transform: translateY(-30px) rotate(5deg); }
+  }
+  
+  @keyframes scale {
+    0% {
+      transform: scale(2);
+      opacity: 0;
+      box-shadow: 0px 0px 50px rgba(255, 165, 0, 0.5);
+    }
+    50% {
+      transform: translate(0px, -5px) scale(1);
+      opacity: 1;
+      box-shadow: 0px 8px 20px rgba(255, 165, 0, 0.5);
+    }
+    100% {
+      transform: translate(0px, 5px) scale(0.1);
+      opacity: 0;
+      box-shadow: 0px 10px 20px rgba(255, 165, 0, 0);
+    }
   }
   
   .float-delayed {
@@ -268,33 +277,6 @@ section {
 
 .letter:hover {
   transform-origin: center;
-}
-/* Performance optimizations for M1/low-end devices */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  
-  html {
-    scroll-behavior: auto;
-  }
-}
-
-/* GPU acceleration for animated elements */
-.float,
-.float-delayed,
-.float-slow,
-.pulse-glow,
-.marquee,
-.reveal-up.visible,
-.letter {
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  will-change: transform;
 }
 
 /* Reduce animation for low-memory devices */

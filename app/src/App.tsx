@@ -353,26 +353,37 @@ function HeroSection() {
 
       {/* Marquee */}
       <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm border-t border-white/10 py-4 overflow-hidden">
-        <div className="marquee whitespace-nowrap flex">
-          {[...Array(4)].map((_, i) => (
-            <span key={i} className="text-2xl md:text-4xl font-bold text-white mx-8">
-              BUILDING TOMORROW'S SYSTEMS TODAY. 
-              <span className="mx-4 text-blue-400">→</span>
-              FULL-STACK ENGINEER 
-              <span className="mx-4 text-purple-400">→</span>
-              DEVOPS & CI/CD 
-              <span className="mx-4 text-pink-400">→</span>
-              AUTOMATION DEVELOPER 
-              <span className="mx-4 text-cyan-400">→</span>
-              UI/UX DESIGNER 
-              <span className="mx-4 text-blue-400">→</span>
-              PROJECT MANAGER 
-              <span className="mx-4 text-purple-400">→</span>
-              QA TESTER 
-              <span className="mx-4 text-pink-400">→</span>
-            </span>
+        <motion.div
+          className="flex w-max"
+          animate={{ x: [0, -2000] }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 30,
+              ease: "linear",
+            },
+          }}
+        >
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="flex whitespace-nowrap shrink-0">
+              <span className="text-2xl md:text-4xl font-bold text-white mx-8">BUILDING TOMORROW'S SYSTEMS TODAY.</span>
+              <span className="text-2xl md:text-4xl font-bold text-blue-400 mx-4">→</span>
+              <span className="text-2xl md:text-4xl font-bold text-white mx-8">FULL-STACK ENGINEER</span>
+              <span className="text-2xl md:text-4xl font-bold text-purple-400 mx-4">→</span>
+              <span className="text-2xl md:text-4xl font-bold text-white mx-8">DEVOPS & CI/CD</span>
+              <span className="text-2xl md:text-4xl font-bold text-pink-400 mx-4">→</span>
+              <span className="text-2xl md:text-4xl font-bold text-white mx-8">AUTOMATION DEVELOPER</span>
+              <span className="text-2xl md:text-4xl font-bold text-cyan-400 mx-4">→</span>
+              <span className="text-2xl md:text-4xl font-bold text-white mx-8">UI/UX DESIGNER</span>
+              <span className="text-2xl md:text-4xl font-bold text-blue-400 mx-4">→</span>
+              <span className="text-2xl md:text-4xl font-bold text-white mx-8">PROJECT MANAGER</span>
+              <span className="text-2xl md:text-4xl font-bold text-purple-400 mx-4">→</span>
+              <span className="text-2xl md:text-4xl font-bold text-white mx-8">QA TESTER</span>
+              <span className="text-2xl md:text-4xl font-bold text-pink-400 mx-4">→</span>
+            </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -440,6 +451,7 @@ function ProjectsShowcase() {
             dragElastic={0.05}
             dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
             className="flex gap-6 cursor-grab active:cursor-grabbing"
+            style={{ touchAction: 'none' }}
           >
             {duplicatedRoles.map((role, index) => {
               const Icon = role.icon;
@@ -450,9 +462,10 @@ function ProjectsShowcase() {
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: (index % 6) * 0.1, duration: 0.6 }}
                   className="flex-shrink-0 w-96"
+                  style={{ pointerEvents: 'auto' }}
                 >
-                  <SpotlightCard spotlightColor={role.spotlightColor} className="h-48">
-                    <div className="flex items-center gap-4 h-full">
+                  <SpotlightCard spotlightColor={role.spotlightColor} className="h-48 pointer-events-auto">
+                    <div className="flex items-center gap-4 h-full pointer-events-none">
                       <div className="flex-shrink-0">
                         <Icon className="w-10 h-10 text-white" />
                       </div>
@@ -501,7 +514,7 @@ function AboutSection() {
           <span className="text-gradient">SCALABLE</span> AND <span className="text-gradient-blue">EFFICIENT</span>
         </motion.h2>
 
-        <motion.div 
+        <motion.div
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
@@ -509,7 +522,7 @@ function AboutSection() {
         >
           <motion.div variants={fadeInUp}>
             <ElectricBorder
-              color="#7df9ff"
+              color="#ef4444"
               speed={1}
               chaos={0.12}
               thickness={2}
@@ -525,13 +538,14 @@ function AboutSection() {
                   "Process Optimization",
                   "Modern Tech Stack"
                 ]}
-                accentColor="rgba(125, 249, 255, 0.6)"
+                iconType="innovation"
+                circleColor="rgba(239, 68, 68, 0.6)"
               />
             </ElectricBorder>
           </motion.div>
           <motion.div variants={fadeInUp}>
             <ElectricBorder
-              color="#ff6b9d"
+              color="#3b82f6"
               speed={1}
               chaos={0.12}
               thickness={2}
@@ -547,13 +561,14 @@ function AboutSection() {
                   "Code Quality",
                   "Maintainability"
                 ]}
-                accentColor="rgba(255, 107, 157, 0.6)"
+                iconType="excellence"
+                circleColor="rgba(59, 130, 246, 0.6)"
               />
             </ElectricBorder>
           </motion.div>
           <motion.div variants={fadeInUp}>
             <ElectricBorder
-              color="#10b981"
+              color="#22c55e"
               speed={1}
               chaos={0.12}
               thickness={2}
@@ -569,7 +584,8 @@ function AboutSection() {
                   "Cloud Technologies",
                   "Emerging Tools"
                 ]}
-                accentColor="rgba(16, 185, 129, 0.6)"
+                iconType="growth"
+                circleColor="rgba(34, 197, 94, 0.6)"
               />
             </ElectricBorder>
           </motion.div>
@@ -641,22 +657,24 @@ function ToolsStackSection() {
               filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6)) drop-shadow(0 0 15px rgba(168, 85, 247, 0.3));
             }
           `}</style>
-          <div className="logo-glow relative">
+          <div className="logo-glow relative overflow-hidden">
             <motion.div
               className="flex gap-12 items-center"
-              animate={{
-                x: [0, -1500],
-              }}
+              animate={{ x: [0, -2000] }}
               transition={{
                 x: {
                   repeat: Infinity,
                   repeatType: "loop",
-                  duration: 20,
+                  duration: 30,
                   ease: "linear",
                 },
               }}
             >
-              {[...additionalTools, ...additionalTools, ...additionalTools].map((tool, index) => (
+              {[
+                ...additionalTools,
+                ...additionalTools,
+                ...additionalTools
+              ].map((tool, index) => (
                 <div key={`${tool.key}-${index}`} className="flex-shrink-0">
                   {tool.icon}
                 </div>

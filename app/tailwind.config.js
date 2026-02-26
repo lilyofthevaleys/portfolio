@@ -72,11 +72,34 @@ module.exports = {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
         },
+        "scale": {
+          "0%": {
+            transform: "scale(2)",
+            opacity: "0",
+            boxShadow: "0px 0px 50px rgba(255, 165, 0, 0.5)",
+          },
+          "50%": {
+            transform: "translate(0px, -5px) scale(1)",
+            opacity: "1",
+            boxShadow: "0px 8px 20px rgba(255, 165, 0, 0.5)",
+          },
+          "100%": {
+            transform: "translate(0px, 5px) scale(0.1)",
+            opacity: "0",
+            boxShadow: "0px 10px 20px rgba(255, 165, 0, 0)",
+          },
+        },
+        "marquee": {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "caret-blink": "caret-blink 1.25s ease-out infinite",
+        "scale": "scale 3s linear infinite",
+        "marquee": "marquee 30s linear infinite",
       },
     },
   },
