@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Toaster, toast } from 'sonner';
 import { motion, useScroll, useTransform, useInView, type Variants } from 'framer-motion';
 import gsap from 'gsap';
 import DarkVeil from '@/components/DarkVeil';
@@ -645,7 +646,7 @@ function ToolsStackSection() {
           </div>
         </motion.div>
 
-        {/* Additional Tools LogoLoop */}
+        {/* Additional Tools Carousel */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -660,7 +661,9 @@ function ToolsStackSection() {
           <div className="logo-glow relative overflow-hidden">
             <motion.div
               className="flex gap-12 items-center"
-              animate={{ x: [0, -2000] }}
+              animate={{ 
+                x: [0, -(60 + 48) * additionalTools.length] 
+              }}
               transition={{
                 x: {
                   repeat: Infinity,
@@ -670,12 +673,9 @@ function ToolsStackSection() {
                 },
               }}
             >
-              {[
-                ...additionalTools,
-                ...additionalTools,
-                ...additionalTools
-              ].map((tool, index) => (
-                <div key={`${tool.key}-${index}`} className="flex-shrink-0">
+              {/* Render multiple copies for seamless infinite scroll */}
+              {Array(5).fill(additionalTools).flat().map((tool, index) => (
+                <div key={`${tool.key}-${index}`} className="flex-shrink-0 w-[60px] h-[60px] flex items-center justify-center">
                   {tool.icon}
                 </div>
               ))}
@@ -1046,89 +1046,173 @@ function ServicesSection() {
         const cardOpacity = useTransform(cardProgress, [0, 0.3, 1], [0, 1, 1]);
 
         return (
-          <div
+          <ServiceCard
             key={index}
-            className="sticky top-24 h-[calc(100vh-6rem)] flex items-center justify-center"
-            style={{ zIndex: index + 1 }}
-          >
-            <motion.div
-              style={{ 
-                y: cardY, 
-                scale: cardScale, 
-                opacity: cardOpacity 
-              }}
-              className="w-full max-w-5xl mx-auto px-6"
-            >
-              <div className={`${service.bgColor} rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden`}>
-                {/* Gradient background effect */}
-                <div className={`absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br ${service.gradient} opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4`} />
-                <div className={`absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr ${service.gradient} opacity-10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4`} />
-                
-                {/* Content */}
-                <div className="relative z-10">
-                  <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-                    {/* Left - Text Content */}
-                    <div>
-                      {/* Icon */}
-                      <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} shadow-lg mb-6`}>
-                        <service.icon className="w-8 h-8 text-white" />
-                      </div>
-                      
-                      <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">{service.title}</h3>
-                      <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">{service.description}</p>
-                      
-                      {/* Includes tags */}
-                      <div>
-                        <p className="text-sm text-white/40 uppercase tracking-wider mb-3">Includes:</p>
-                        <div className="flex flex-wrap gap-2">
-                          {service.includes.map((item, i) => (
-                            <motion.span 
-                              key={i}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              whileInView={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: 0.1 * i }}
-                              whileHover={{ scale: 1.05 }}
-                              className={`text-sm bg-gradient-to-r ${service.gradient} text-white px-4 py-2 rounded-full cursor-default shadow-lg`}
-                            >
-                              {item}
-                            </motion.span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Right - Visual */}
-                    <div className="relative">
-                      <motion.div 
-                        whileHover={{ scale: 1.02, y: -5 }}
-                        transition={{ duration: 0.3 }}
-                        className="relative rounded-2xl overflow-hidden shadow-2xl"
-                      >
-                        {/* Image container with gradient overlay */}
-                        <div className="relative aspect-square">
-                          <img 
-                            src={service.image} 
-                            alt={service.title}
-                            className="w-full h-full object-cover rounded-2xl"
-                          />
-                          {/* Subtle gradient overlay */}
-                          <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-20 mix-blend-overlay rounded-2xl`} />
-                        </div>
-                      </motion.div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Card number indicator */}
-                <div className="absolute top-6 right-6 text-white/10 text-6xl font-black">
-                  0{index + 1}
-                </div>
-              </div>
-            </motion.div>
-          </div>
+            service={service}
+            index={index}
+            cardY={cardY}
+            cardScale={cardScale}
+            cardOpacity={cardOpacity}
+          />
         );
       })}
     </section>
+  );
+}
+
+// Service Card component with spotlight hover effect
+interface ServiceCardProps {
+  service: {
+    title: string;
+    description: string;
+    includes: string[];
+    gradient: string;
+    bgColor: string;
+    icon: any;
+    image: string;
+  };
+  index: number;
+  cardY: any;
+  cardScale: any;
+  cardOpacity: any;
+}
+
+function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceCardProps) {
+  const divRef = useRef<HTMLDivElement>(null);
+  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [opacity, setOpacity] = useState<number>(0);
+
+  const handleMouseMove: React.MouseEventHandler<HTMLDivElement> = e => {
+    if (!divRef.current || isFocused) return;
+
+    const rect = divRef.current.getBoundingClientRect();
+    setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
+  const handleFocus = () => {
+    setIsFocused(true);
+    setOpacity(0.3);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    setOpacity(0);
+  };
+
+  const handleMouseEnter = () => {
+    setOpacity(0.3);
+  };
+
+  const handleMouseLeave = () => {
+    setOpacity(0);
+  };
+
+  // Get spotlight color based on service gradient
+  const getSpotlightColor = (gradient: string) => {
+    if (gradient.includes('purple') && gradient.includes('pink')) {
+      return 'rgba(192, 132, 252, 0.3)'; // purple
+    } else if (gradient.includes('cyan') && gradient.includes('blue')) {
+      return 'rgba(34, 211, 238, 0.3)'; // cyan
+    } else if (gradient.includes('orange') && gradient.includes('red')) {
+      return 'rgba(251, 146, 60, 0.3)'; // orange
+    }
+    return 'rgba(255, 255, 255, 0.25)';
+  };
+
+  return (
+    <div
+      className="sticky top-24 h-[calc(100vh-6rem)] flex items-center justify-center"
+      style={{ zIndex: index + 1 }}
+    >
+      <motion.div
+        style={{ 
+          y: cardY, 
+          scale: cardScale, 
+          opacity: cardOpacity 
+        }}
+        className="w-full max-w-5xl mx-auto px-6"
+      >
+        <div 
+          ref={divRef}
+          onMouseMove={handleMouseMove}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className={`${service.bgColor} rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden`}
+        >
+          {/* Spotlight hover effect */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-in-out z-[5]"
+            style={{
+              opacity,
+              background: `radial-gradient(circle at ${position.x}px ${position.y}px, ${getSpotlightColor(service.gradient)}, transparent 80%)`
+            }}
+          />
+          
+          {/* Gradient background effect */}
+          <div className={`absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br ${service.gradient} opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4`} />
+          <div className={`absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr ${service.gradient} opacity-10 rounded-full blur-2xl translate-y-1/2 -translate-x-1/4`} />
+          
+          {/* Content */}
+          <div className="relative z-10">
+            <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+              {/* Left - Text Content */}
+              <div>
+                {/* Icon */}
+                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} shadow-lg mb-6`}>
+                  <service.icon className="w-8 h-8 text-white" />
+                </div>
+                
+                <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">{service.title}</h3>
+                <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">{service.description}</p>
+                
+                {/* Includes tags */}
+                <div>
+                  <p className="text-sm text-white/40 uppercase tracking-wider mb-3">Includes:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {service.includes.map((item, i) => (
+                      <motion.span 
+                        key={i}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.1 * i }}
+                        whileHover={{ scale: 1.05 }}
+                        className={`text-sm bg-gradient-to-r ${service.gradient} text-white px-4 py-2 rounded-full cursor-default shadow-lg`}
+                      >
+                        {item}
+                      </motion.span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              {/* Right - Visual */}
+              <div className="relative">
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                  {/* Image container with gradient overlay */}
+                  <div className="relative aspect-square">
+                    <img 
+                      src={service.image} 
+                      alt={service.title}
+                      className="w-full h-full object-cover rounded-2xl"
+                    />
+                    {/* Subtle gradient overlay */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-20 mix-blend-overlay rounded-2xl`} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card number indicator */}
+          <div className="absolute top-6 right-6 text-white/10 text-6xl font-black z-[2]">
+            0{index + 1}
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 }
 
@@ -1136,6 +1220,56 @@ function ServicesSection() {
 function ContactSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          access_key: '92a21bd2-0dc8-49e1-a973-66dcc435be63',
+          name: formData.name,
+          email: formData.email,
+          subject: `New Portfolio Contact: ${formData.name}`,
+          message: formData.message
+        })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success('Message sent successfully! I\'ll get back to you soon.');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        toast.error('Failed to send message. Please try again or email me directly.');
+      }
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast.error('An error occurred. Please email me directly at charleneathena@gmail.com');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
 
   return (
     <section ref={ref} id="contact" className="bg-black py-20 relative overflow-hidden">
@@ -1167,12 +1301,6 @@ function ContactSection() {
           >
             <h2 className="text-5xl md:text-7xl font-bold text-white mb-6">
               Get in <span className="text-gradient">Touch</span>
-              <motion.span
-                animate={{ rotate: [0, 10, -10, 0] }}
-                transition={{ duration: 4, repeat: Infinity }}
-              >
-                <Flower2 className="inline-block w-12 h-12 text-blue-400 ml-2" />
-              </motion.span>
             </h2>
             <p className="text-white/60 mb-8 max-w-md leading-relaxed">
               Thank you for visiting my portfolio. I'm always open to discussing new opportunities, 
@@ -1183,7 +1311,12 @@ function ContactSection() {
               className="flex items-center gap-3 text-white/60 cursor-pointer"
             >
               <span className="text-xl">✉</span>
-              <span className="line-reveal">charleneathena@gmail.com</span>
+              <a 
+                href="mailto:charleneathena@gmail.com"
+                className="line-reveal hover:text-white transition-colors"
+              >
+                charleneathena@gmail.com
+              </a>
             </motion.div>
           </motion.div>
 
@@ -1193,7 +1326,7 @@ function ContactSection() {
             transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
           >
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -1201,7 +1334,11 @@ function ContactSection() {
               >
                 <label className="block text-sm text-white/60 mb-2">Name*</label>
                 <Input 
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   placeholder="Your name" 
+                  required
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-500 transition-colors"
                 />
               </motion.div>
@@ -1212,8 +1349,12 @@ function ContactSection() {
               >
                 <label className="block text-sm text-white/60 mb-2">Email*</label>
                 <Input 
+                  name="email"
                   type="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="your@email.com" 
+                  required
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-500 transition-colors"
                 />
               </motion.div>
@@ -1224,6 +1365,9 @@ function ContactSection() {
               >
                 <label className="block text-sm text-white/60 mb-2">Message</label>
                 <Textarea 
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
                   placeholder="Your message..." 
                   rows={4}
                   className="bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-blue-500 transition-colors resize-none"
@@ -1234,8 +1378,12 @@ function ContactSection() {
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.6, duration: 0.5 }}
               >
-                <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 rounded-full py-6 transition-all hover:shadow-lg hover:shadow-blue-500/30">
-                  Get in touch
+                <Button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600 rounded-full py-6 transition-all hover:shadow-lg hover:shadow-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Sending...' : 'Get in touch'}
                   <ArrowUpRight className="w-5 h-5 ml-2" />
                 </Button>
               </motion.div>
@@ -1380,6 +1528,7 @@ function App() {
     <div className="min-h-screen bg-black">
       {/* Noise overlay for texture */}
       <div className="noise-overlay" />
+      <Toaster position="top-right" theme="dark" richColors />
       
       <Navigation onNavigate={handleNavigate} />
       <HeroSection />
