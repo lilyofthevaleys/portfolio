@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Toaster, toast } from 'sonner';
 import { motion, useScroll, useTransform, useInView, type Variants } from 'framer-motion';
 import gsap from 'gsap';
+import LoadingScreen from '@/components/LoadingScreen';
 import DarkVeil from '@/components/DarkVeil';
 import DotGrid from '@/components/DotGrid';
 import Lanyard from '@/components/Lanyard';
@@ -175,7 +176,7 @@ function Navigation({ onNavigate }: { onNavigate: (section: string) => void }) {
 }
 
 // Hero Section with parallax flowers
-function HeroSection() {
+function HeroSection({ isLoading }: { isLoading: boolean }) {
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const scale = useTransform(scrollY, [0, 500], [1, 0.9]);
@@ -291,9 +292,11 @@ function HeroSection() {
       </div>
 
       {/* Lanyard on the right */}
-      <div className="absolute right-0 top-0 w-full md:w-1/3 h-full z-50 pointer-events-auto" style={{ transform: 'translateX(-25%)' }}>
-        <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} transparent={true} />
-      </div>
+      {!isLoading && (
+        <div className="absolute right-0 top-0 w-full md:w-1/3 h-full z-50 pointer-events-auto" style={{ transform: 'translateX(-25%)' }}>
+          <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} transparent={true} />
+        </div>
+      )}
 
       {/* Content */}
       <motion.div 
@@ -1517,6 +1520,8 @@ function FooterSection() {
 
 // Main App Component
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   const handleNavigate = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -1524,23 +1529,30 @@ function App() {
     }
   };
 
+  const handleLoadComplete = () => {
+    setIsLoading(false);
+  };
+
   return (
-    <div className="min-h-screen bg-black">
-      {/* Noise overlay for texture */}
-      <div className="noise-overlay" />
-      <Toaster position="top-right" theme="dark" richColors />
-      
-      <Navigation onNavigate={handleNavigate} />
-      <HeroSection />
-      <ProjectsShowcase />
-      <AboutSection />
-      <ToolsStackSection />
-      <WorkExperienceSection />
-      <RecentWorksSection />
-      <ServicesSection />
-      <ContactSection />
-      <FooterSection />
-    </div>
+    <>
+      {isLoading && <LoadingScreen onLoadComplete={handleLoadComplete} />}
+      <div className="min-h-screen bg-black">
+        {/* Noise overlay for texture */}
+        <div className="noise-overlay" />
+        <Toaster position="top-right" theme="dark" richColors />
+        
+        {!isLoading && <Navigation onNavigate={handleNavigate} />}
+        <HeroSection isLoading={isLoading} />
+        <ProjectsShowcase />
+        <AboutSection />
+        <ToolsStackSection />
+        <WorkExperienceSection />
+        <RecentWorksSection />
+        <ServicesSection />
+        <ContactSection />
+        <FooterSection />
+      </div>
+    </>
   );
 }
 
