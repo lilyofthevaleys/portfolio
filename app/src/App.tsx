@@ -32,17 +32,24 @@ const terraImage = new URL('./assets/lanyard/images/mineral-processing-facility.
 const merdekaImage = new URL('./assets/lanyard/images/830266_1200.jpg', import.meta.url).href;
 const decisionImage = new URL('./assets/lanyard/images/WhatsApp Image 2026-02-26 at 08.36.15.jpeg', import.meta.url).href;
 
-const fullStackImage = new URL('./assets/lanyard/images/Untitled design-3.png', import.meta.url).href;
-const automationImage = new URL('./assets/lanyard/images/Untitled design.png', import.meta.url).href;
-const devopsImage = new URL('./assets/lanyard/images/Untitled design-2.png', import.meta.url).href;
+const fullStackImage = new URL('./assets/lanyard/images/gifs/fullstack.gif', import.meta.url).href;
+const automationImage = new URL('./assets/lanyard/images/gifs/automation.gif', import.meta.url).href;
+const devopsImage = new URL('./assets/lanyard/images/gifs/devops.gif', import.meta.url).href;
+
+const eternaAcademyImage = new URL('./assets/lanyard/images/eternaacademy.png', import.meta.url).href;
+const eternaPortalImage = new URL('./assets/lanyard/images/eternaportal.png', import.meta.url).href;
 
 // Animation variants with proper types
 const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 60 },
+  hidden: { opacity: 0, y: 80, scale: 0.95 },
   visible: { 
     opacity: 1, 
     y: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }
+    scale: 1,
+    transition: { 
+      duration: 0.7, 
+      ease: [0.16, 1, 0.3, 1] as const 
+    }
   }
 };
 
@@ -51,8 +58,8 @@ const staggerContainer: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2
+      staggerChildren: 0.15,
+      delayChildren: 0.3
     }
   }
 };
@@ -831,13 +838,16 @@ function RecentWorksSection() {
     { name: 'Terra Mineral Nusantara', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-green', link: 'https://terra-mineral-nusantara.webflow.io/', image: terraImage },
     { name: 'Merdeka Client System', category: 'Project Management & QA', tags: ['System Documentation', 'QA Testing', 'Project Manager'], gradient: 'gradient-orange', link: 'https://merdeka.app/login', image: merdekaImage },
     { name: 'Decision Educational Game', category: 'Frontend Development & Architecture', tags: ['Frontend Dev', 'Architecture Design', 'UAT'], gradient: 'gradient-pink', link: 'https://decision-educationalgame-xryd.vercel.app', image: decisionImage },
+    { name: 'Eterna Academy', category: 'Full-Stack Development', tags: ['Next.js', 'Frontend Dev', 'LMS Platform'], gradient: 'gradient-blue', link: 'https://eternaacademy.id/', image: eternaAcademyImage },
+    { name: 'Eterna Portal', category: 'Full-Stack Development', tags: ['React', 'Backend Integration', 'Portal System'], gradient: 'gradient-purple', link: 'https://portal.eternaindonesia.com/', image: eternaPortalImage },
+    { name: 'SmartApply', category: 'AI-Powered Application', tags: ['AI Integration', 'Automation', 'Coming Soon'], gradient: 'gradient-cyan', link: null, image: null },
   ];
 
   return (
     <section ref={ref} className="bg-black py-20">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <motion.h2 
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 60 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-4xl md:text-6xl font-bold text-white mb-4"
@@ -845,12 +855,20 @@ function RecentWorksSection() {
           Recent <span className="text-gradient">Works</span>
         </motion.h2>
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-white/60 mb-12"
+          transition={{ delay: 0.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          className="text-white/60 mb-4"
         >
           Scroll down to explore my key contributions and technical achievements
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-white/40 text-sm italic mb-12"
+        >
+          Disclaimer: Some of these are inaccessible due to authorization purposes, contact me to get a private tour of what I've built
         </motion.p>
 
         <motion.div 
@@ -864,34 +882,61 @@ function RecentWorksSection() {
               key={index}
               variants={fadeInUp}
               whileHover={{ y: -10, scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setSelectedProject(project)}
               className="group relative bg-white/5 rounded-2xl overflow-hidden cursor-pointer hover:bg-white/10 transition-all duration-500"
             >
               {project.image ? (
                 <>
-                  <div className="relative h-48 w-full">
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                    className="relative h-48 w-full"
+                  >
                     <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
-                    <div className="absolute inset-0 bg-black/70 group-hover:bg-black/60 transition-all duration-500" />
-                  </div>
+                    <motion.div 
+                      initial={{ opacity: 0.7 }}
+                      whileInView={{ opacity: 0.7 }}
+                      whileHover={{ opacity: 0.6 }}
+                      className="absolute inset-0 bg-black/70 transition-all duration-500" 
+                    />
+                  </motion.div>
                 </>
               ) : (
                 <div className={`h-48 ${project.gradient} opacity-40 group-hover:opacity-70 transition-all duration-500`} />
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent pointer-events-none" />
-              <div className="absolute bottom-0 left-0 right-0 p-6">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
+                className="absolute bottom-0 left-0 right-0 p-6"
+              >
                 <p className="text-xs text-white/50 uppercase tracking-wider mb-1">{project.category}</p>
                 <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">{project.name}</h3>
                 <div className="flex flex-wrap gap-2">
                   {project.tags.map((tag, tagIndex) => (
-                    <span key={tagIndex} className="text-xs bg-white/10 text-white/70 px-3 py-1 rounded-full group-hover:bg-blue-500/20 group-hover:text-blue-300 transition-colors">
+                    <motion.span 
+                      key={tagIndex} 
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.3, delay: index * 0.1 + 0.3 + tagIndex * 0.05 }}
+                      className="text-xs bg-white/10 text-white/70 px-3 py-1 rounded-full group-hover:bg-blue-500/20 group-hover:text-blue-300 transition-colors"
+                    >
                       {tag}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
-              </div>
+              </motion.div>
               <motion.div 
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileHover={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.5, rotate: -90 }}
+                whileInView={{ opacity: 0, scale: 0.5, rotate: -90 }}
+                whileHover={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 0.3 }}
                 className="absolute top-4 right-4 w-10 h-10 bg-white rounded-full flex items-center justify-center"
               >
                 <ArrowUpRight className="w-5 h-5 text-black" />
@@ -926,10 +971,16 @@ function RecentWorksSection() {
                 ? 'Managed system documentation, conducted comprehensive QA testing, and served as Project Manager for Merdeka Client System. The project ensures high-quality deliverables through meticulous documentation, rigorous testing protocols, and effective project coordination.'
                 : selectedProject?.name === 'Decision Educational Game'
                 ? 'Built the entire frontend application with comprehensive architecture design and conducted User Acceptance Testing for Decision Educational Game. The project delivers an engaging educational game experience with intuitive interfaces, scalable system design, and rigorous quality assurance.'
+                : selectedProject?.name === 'Eterna Academy'
+                ? 'Developed a comprehensive Learning Management System (LMS) platform for Eterna Academy using Next.js. The platform features course management, student tracking, and interactive learning modules designed to enhance the educational experience with modern web technologies.'
+                : selectedProject?.name === 'Eterna Portal'
+                ? 'Built an enterprise portal system for Eterna Indonesia that centralizes employee resources, project management, and internal communications. The portal integrates with various backend systems to provide a seamless user experience with robust authentication and authorization controls.'
+                : selectedProject?.name === 'SmartApply'
+                ? 'An upcoming AI-powered application platform that leverages artificial intelligence to streamline and automate the application process. Features include intelligent form filling, document processing, and automated workflow management. Stay tuned for the launch!'
                 : `This project was developed using ${selectedProject?.tags.join(', ')}, focusing on scalability, maintainability, and optimal performance. The solution was designed to meet client requirements while ensuring robust technical architecture and comprehensive documentation.`
               }
             </p>
-            {selectedProject?.link && (
+            {selectedProject?.link ? (
               <a 
                 href={selectedProject.link} 
                 target="_blank" 
@@ -938,7 +989,11 @@ function RecentWorksSection() {
               >
                 Visit Website <ArrowUpRight className="w-4 h-4" />
               </a>
-            )}
+            ) : selectedProject?.name === 'SmartApply' ? (
+              <div className="inline-flex items-center gap-2 text-white/40 font-medium">
+                <span className="px-3 py-1 bg-white/5 rounded-full text-xs">Coming Soon</span>
+              </div>
+            ) : null}
           </div>
         </DialogContent>
       </Dialog>
@@ -1017,19 +1072,19 @@ function ServicesSection() {
       <div className="sticky top-0 h-screen flex flex-col justify-start pt-20 z-0">
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
           <motion.h2 
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 60 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             className="text-4xl md:text-6xl font-bold text-white mb-4"
           >
             <span className="text-gradient">Services</span>
           </motion.h2>
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.6 }}
-            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            viewport={{ once: true, margin: "-100px" }}
             className="text-white/60 max-w-2xl"
           >
             Focused on high performance and measurable results, I provide end-to-end digital solutions
@@ -1195,11 +1250,12 @@ function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceC
               <div className="relative">
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                   {/* Image container with gradient overlay */}
-                  <div className="relative aspect-square">
+                  <div className="relative aspect-square bg-black/20">
                     <img 
                       src={service.image} 
                       alt={service.title}
                       className="w-full h-full object-cover rounded-2xl"
+                      style={{ mixBlendMode: 'multiply' }}
                     />
                     {/* Subtle gradient overlay */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-20 mix-blend-overlay rounded-2xl`} />
