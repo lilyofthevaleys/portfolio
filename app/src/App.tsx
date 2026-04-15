@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { Menu, X, ArrowUpRight, Code2, Rocket, Zap, Palette, Briefcase, ClipboardCheck, Wrench } from 'lucide-react';
 import { SiGoogleappsscript, SiAmazonwebservices, SiTrello, SiAsana, SiDiscord, SiCivicrm } from 'react-icons/si';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Toaster, toast } from 'sonner';
-import { motion, useScroll, useTransform, useInView, type Variants } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useInView, type Variants } from 'framer-motion';
 import gsap from 'gsap';
 import LoadingScreen from '@/components/LoadingScreen';
 import DarkVeil from '@/components/DarkVeil';
@@ -38,6 +37,7 @@ const devopsImage = new URL('./assets/lanyard/images/gifs/devops.gif', import.me
 
 const eternaAcademyImage = new URL('./assets/lanyard/images/eternaacademy.png', import.meta.url).href;
 const eternaPortalImage = new URL('./assets/lanyard/images/eternaportal.png', import.meta.url).href;
+const smartApplyImage = new URL('./assets/lanyard/images/SmartApply.jpeg', import.meta.url).href;
 
 // Animation variants with proper types
 const fadeInUp: Variants = {
@@ -63,6 +63,175 @@ const staggerContainer: Variants = {
     }
   }
 };
+
+// Privacy Policy Component
+function PrivacyPolicy({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  return (
+    <>
+      {isOpen && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[100]"
+        >
+          <div 
+            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+            onClick={onClose}
+          />
+          <motion.div 
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            className="absolute right-0 top-0 h-full w-full max-w-2xl bg-white overflow-y-auto"
+          >
+            <div className="p-8 md:p-12">
+              <div className="flex justify-between items-start mb-8">
+                <h1 className="text-3xl md:text-4xl font-bold text-black">Privacy Policy</h1>
+                <button 
+                  onClick={onClose}
+                  className="flex items-center gap-2 text-black/60 hover:text-black transition-colors"
+                >
+                  <span className="text-sm">Close</span>
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="prose prose-sm max-w-none text-black/80">
+                <p className="text-sm text-black/40 mb-6">Effective Date: April 10, 2026</p>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">1. Introduction</h2>
+                  <p className="mb-4">
+                    Welcome to my portfolio website. I respect your privacy and am committed to protecting your personal data. 
+                    This privacy policy explains how I collect, use, and safeguard your information when you visit my website.
+                  </p>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">2. Information I Collect</h2>
+                  <h3 className="text-lg font-semibold text-black mb-2">Information You Provide</h3>
+                  <ul className="list-disc pl-6 mb-4 space-y-2">
+                    <li>Name and email address (when you contact me through the contact form)</li>
+                    <li>Any other information you choose to provide in messages</li>
+                  </ul>
+                  <h3 className="text-lg font-semibold text-black mb-2">Automatically Collected Information</h3>
+                  <ul className="list-disc pl-6 mb-4 space-y-2">
+                    <li>IP address</li>
+                    <li>Browser type and version</li>
+                    <li>Device information</li>
+                    <li>Pages visited and time spent on pages</li>
+                    <li>Referring website addresses</li>
+                  </ul>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">3. How I Use Your Information</h2>
+                  <p className="mb-3">I use the collected information to:</p>
+                  <ul className="list-disc pl-6 mb-4 space-y-2">
+                    <li>Respond to your inquiries and messages</li>
+                    <li>Improve website functionality and user experience</li>
+                    <li>Analyze website traffic and usage patterns</li>
+                    <li>Maintain website security</li>
+                  </ul>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">4. Google Analytics</h2>
+                  <p className="mb-4">
+                    This website uses Google Analytics, a web analytics service provided by Google, Inc. ("Google"). 
+                    Google Analytics uses cookies to help analyze how users interact with the website.
+                  </p>
+                  <p className="mb-4">
+                    The information generated by the cookie about your use of the website (including your IP address) 
+                    will be transmitted to and stored by Google on servers in the United States. Google will use this 
+                    information to evaluate your use of the website, compile reports on website activity, and provide 
+                    other services relating to website activity and internet usage.
+                  </p>
+                  <p className="mb-4">
+                    You may opt out of Google Analytics tracking by installing the 
+                    <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline"> Google Analytics Opt-out Browser Add-on</a>.
+                  </p>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">5. Cookies</h2>
+                  <p className="mb-4">
+                    This website uses cookies to enhance user experience and gather analytics data. Cookies are small 
+                    text files stored on your device. You can control cookies through your browser settings and choose 
+                    to disable them, though this may affect website functionality.
+                  </p>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">6. Data Sharing and Disclosure</h2>
+                  <p className="mb-4">
+                    I do not sell, trade, or rent your personal information to third parties. Information may be shared with:
+                  </p>
+                  <ul className="list-disc pl-6 mb-4 space-y-2">
+                    <li><strong>Service Providers:</strong> Google Analytics for website analytics</li>
+                    <li><strong>Legal Requirements:</strong> When required by law or to protect my rights</li>
+                  </ul>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">7. Data Security</h2>
+                  <p className="mb-4">
+                    I implement reasonable security measures to protect your personal information. However, no method 
+                    of transmission over the internet or electronic storage is 100% secure, and I cannot guarantee absolute security.
+                  </p>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">8. Your Rights</h2>
+                  <p className="mb-3">You have the right to:</p>
+                  <ul className="list-disc pl-6 mb-4 space-y-2">
+                    <li>Access the personal data I hold about you</li>
+                    <li>Request correction of inaccurate data</li>
+                    <li>Request deletion of your data</li>
+                    <li>Opt out of analytics tracking</li>
+                    <li>Withdraw consent at any time</li>
+                  </ul>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">9. Third-Party Links</h2>
+                  <p className="mb-4">
+                    This website may contain links to external websites. I am not responsible for the privacy practices 
+                    of these third-party sites. Please review their privacy policies before providing any personal information.
+                  </p>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">10. Changes to This Privacy Policy</h2>
+                  <p className="mb-4">
+                    I may update this privacy policy from time to time. Changes will be posted on this page with an 
+                    updated effective date. Continued use of the website after changes constitutes acceptance of the updated policy.
+                  </p>
+                </section>
+
+                <section className="mb-8">
+                  <h2 className="text-xl font-bold text-black mb-3">11. Contact Information</h2>
+                  <p className="mb-4">
+                    If you have any questions about this privacy policy or how your data is handled, please contact me through 
+                    the contact form on this website or via the social media links provided.
+                  </p>
+                </section>
+
+                <div className="mt-12 pt-6 border-t border-black/10">
+                  <p className="text-sm text-black/40">
+                    This privacy policy was last updated on April 10, 2026.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </>
+  );
+}
 
 // Navigation Component
 function Navigation({ onNavigate }: { onNavigate: (section: string) => void }) {
@@ -627,7 +796,7 @@ function ToolsStackSection() {
   return (
     <section ref={ref} className="bg-black py-20 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <motion.h2 
+        <motion.h2
           initial={{ opacity: 0, x: -50 }}
           animate={isInView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -833,19 +1002,19 @@ function RecentWorksSection() {
 
   const projects = [
     { name: 'NJCP Football', category: 'Full-Stack Development', tags: ['Frontend Dev', 'QA Testing', 'Architecture Design'], gradient: 'gradient-blue', link: 'https://njcpfootball.com/', image: njcpImage },
-    { name: 'Sion Education', category: 'Full-Stack Development', tags: ['Frontend Dev', 'Database Schema', 'Architecture Design'], gradient: 'gradient-cyan', link: 'https://sion-education-website.vercel.app/', image: sionImage },
-    { name: 'Quantum Luminous', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-purple', link: 'https://quantum-luminous.webflow.io/', image: quantumImage },
-    { name: 'Terra Mineral Nusantara', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-green', link: 'https://terra-mineral-nusantara.webflow.io/', image: terraImage },
-    { name: 'Merdeka Client System', category: 'Project Management & QA', tags: ['System Documentation', 'QA Testing', 'Project Manager'], gradient: 'gradient-orange', link: 'https://merdeka.app/login', image: merdekaImage },
-    { name: 'Decision Educational Game', category: 'Frontend Development & Architecture', tags: ['Frontend Dev', 'Architecture Design', 'UAT'], gradient: 'gradient-pink', link: 'https://decision-educationalgame-xryd.vercel.app', image: decisionImage },
     { name: 'Eterna Academy', category: 'Full-Stack Development', tags: ['Next.js', 'Frontend Dev', 'LMS Platform'], gradient: 'gradient-blue', link: 'https://eternaacademy.id/', image: eternaAcademyImage },
+    { name: 'Quantum Luminous', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-purple', link: 'https://quantum-luminous.webflow.io/', image: quantumImage },
+    { name: 'Sion Education', category: 'Full-Stack Development', tags: ['Frontend Dev', 'Database Schema', 'Architecture Design'], gradient: 'gradient-cyan', link: 'https://sion-education-website.vercel.app/', image: sionImage },
+    { name: 'Decision Educational Game', category: 'Frontend Development & Architecture', tags: ['Frontend Dev', 'Architecture Design', 'UAT'], gradient: 'gradient-pink', link: 'https://decision-educationalgame-xryd.vercel.app', image: decisionImage },
     { name: 'Eterna Portal', category: 'Full-Stack Development', tags: ['React', 'Backend Integration', 'Portal System'], gradient: 'gradient-purple', link: 'https://portal.eternaindonesia.com/', image: eternaPortalImage },
-    { name: 'SmartApply', category: 'AI-Powered Application', tags: ['AI Integration', 'Automation', 'Coming Soon'], gradient: 'gradient-cyan', link: null, image: null },
+    { name: 'Merdeka Client System', category: 'Project Management & QA', tags: ['System Documentation', 'QA Testing', 'Project Manager'], gradient: 'gradient-orange', link: 'https://merdeka.app/login', image: merdekaImage },
+    { name: 'Terra Mineral Nusantara', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-green', link: 'https://terra-mineral-nusantara.webflow.io/', image: terraImage },
+    { name: 'SmartApply', category: 'AI-Powered Application', tags: ['Architecture Design', 'Frontend Dev', 'Prototype'], gradient: 'gradient-cyan', link: 'https://smartapply-sand.vercel.app/', image: smartApplyImage },
   ];
 
   return (
-    <section ref={ref} className="bg-black py-20">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+    <section ref={ref} className="relative py-20">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         <motion.h2 
           initial={{ opacity: 0, y: 60 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -946,58 +1115,157 @@ function RecentWorksSection() {
         </motion.div>
       </div>
 
-      <Dialog open={!!selectedProject} onOpenChange={() => setSelectedProject(null)}>
-        <DialogContent className="bg-black/95 text-white max-w-2xl border border-white/10">
-          <DialogHeader>
-            <p className="text-sm text-white/50 uppercase tracking-wider">{selectedProject?.category}</p>
-            <DialogTitle className="text-3xl font-bold text-white">{selectedProject?.name}</DialogTitle>
-          </DialogHeader>
-          <div className="mt-4">
-            {selectedProject?.image ? (
-              <img src={selectedProject.image} alt={selectedProject.name} className="w-full h-auto rounded-xl mb-6 border border-white/20" />
-            ) : (
-              <div className={`h-48 ${selectedProject?.gradient} rounded-xl mb-6 opacity-60`} />
-            )}
-            <p className="text-white/70 leading-relaxed mb-4">
-              {selectedProject?.name === 'NJCP Football' 
-                ? 'Developed the frontend interface, conducted comprehensive QA testing, and designed the system architecture for NJCP Football. The project focuses on delivering a seamless user experience with robust testing practices and scalable architecture design.'
-                : selectedProject?.name === 'Sion Education'
-                ? 'Built the entire front end, database schema, and architecture for Sion Education. The project delivers a comprehensive educational platform with robust data management and scalable system design.'
-                : selectedProject?.name === 'Quantum Luminous'
-                ? 'Led the UI/UX design, created 3D models, and conducted User Acceptance Testing for Quantum Luminous. The project showcases immersive 3D experiences with intuitive user interfaces and rigorous quality assurance.'
-                : selectedProject?.name === 'Terra Mineral Nusantara'
-                ? 'Led the UI/UX design, created 3D models, and conducted User Acceptance Testing for Terra Mineral Nusantara. The project delivers an industrial-grade web experience with detailed 3D visualizations and comprehensive quality assurance.'
-                : selectedProject?.name === 'Merdeka Client System'
-                ? 'Managed system documentation, conducted comprehensive QA testing, and served as Project Manager for Merdeka Client System. The project ensures high-quality deliverables through meticulous documentation, rigorous testing protocols, and effective project coordination.'
-                : selectedProject?.name === 'Decision Educational Game'
-                ? 'Built the entire frontend application with comprehensive architecture design and conducted User Acceptance Testing for Decision Educational Game. The project delivers an engaging educational game experience with intuitive interfaces, scalable system design, and rigorous quality assurance.'
-                : selectedProject?.name === 'Eterna Academy'
-                ? 'Developed a comprehensive Learning Management System (LMS) platform for Eterna Academy using Next.js. The platform features course management, student tracking, and interactive learning modules designed to enhance the educational experience with modern web technologies.'
-                : selectedProject?.name === 'Eterna Portal'
-                ? 'Built an enterprise portal system for Eterna Indonesia that centralizes employee resources, project management, and internal communications. The portal integrates with various backend systems to provide a seamless user experience with robust authentication and authorization controls.'
-                : selectedProject?.name === 'SmartApply'
-                ? 'An upcoming AI-powered application platform that leverages artificial intelligence to streamline and automate the application process. Features include intelligent form filling, document processing, and automated workflow management. Stay tuned for the launch!'
-                : `This project was developed using ${selectedProject?.tags.join(', ')}, focusing on scalability, maintainability, and optimal performance. The solution was designed to meet client requirements while ensuring robust technical architecture and comprehensive documentation.`
-              }
-            </p>
-            {selectedProject?.link ? (
-              <a 
-                href={selectedProject.link} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 font-medium transition-colors"
-              >
-                Visit Website <ArrowUpRight className="w-4 h-4" />
-              </a>
-            ) : selectedProject?.name === 'SmartApply' ? (
-              <div className="inline-flex items-center gap-2 text-white/40 font-medium">
-                <span className="px-3 py-1 bg-white/5 rounded-full text-xs">Coming Soon</span>
-              </div>
-            ) : null}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <ProjectDetailModal project={selectedProject} onClose={() => setSelectedProject(null)} />
     </section>
+  );
+}
+
+const projectDescriptions: Record<string, string> = {
+  'NJCP Football': 'Developed the frontend interface, conducted comprehensive QA testing, and designed the system architecture for NJCP Football. The project focuses on delivering a seamless user experience with robust testing practices and scalable architecture design.',
+  'Sion Education': 'Built the entire front end, database schema, and architecture for Sion Education. The project delivers a comprehensive educational platform with robust data management and scalable system design.',
+  'Quantum Luminous': 'Led the UI/UX design, created 3D models, and conducted User Acceptance Testing for Quantum Luminous. The project showcases immersive 3D experiences with intuitive user interfaces and rigorous quality assurance.',
+  'Terra Mineral Nusantara': 'Led the UI/UX design, created 3D models, and conducted User Acceptance Testing for Terra Mineral Nusantara. The project delivers an industrial-grade web experience with detailed 3D visualizations and comprehensive quality assurance.',
+  'Merdeka Client System': 'Managed system documentation, conducted comprehensive QA testing, and served as Project Manager for Merdeka Client System. The project ensures high-quality deliverables through meticulous documentation, rigorous testing protocols, and effective project coordination.',
+  'Decision Educational Game': 'Built the entire frontend application with comprehensive architecture design and conducted User Acceptance Testing for Decision Educational Game. The project delivers an engaging educational game experience with intuitive interfaces, scalable system design, and rigorous quality assurance.',
+  'Eterna Academy': 'Developed a comprehensive Learning Management System (LMS) platform for Eterna Academy using Next.js. The platform features course management, student tracking, and interactive learning modules designed to enhance the educational experience with modern web technologies.',
+  'Eterna Portal': 'Built an enterprise portal system for Eterna Indonesia that centralizes employee resources, project management, and internal communications. The portal integrates with various backend systems to provide a seamless user experience with robust authentication and authorization controls.',
+  'SmartApply': 'Designed the full system architecture and built the frontend for SmartApply, an AI-powered application platform. Currently live as a prototype with the backend actively in development. The platform aims to streamline and automate the application process through intelligent form filling, document processing, and automated workflow management.',
+};
+
+type ProjectType = {
+  name: string;
+  category: string;
+  tags: string[];
+  gradient: string;
+  link: string | null;
+  image: string | null;
+};
+
+function ProjectDetailModal({ project, onClose }: { project: ProjectType | null; onClose: () => void }) {
+  useEffect(() => {
+    if (!project) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [project, onClose]);
+
+  const description = project ? (projectDescriptions[project.name] ?? `This project was developed using ${project.tags.join(', ')}, focusing on scalability, maintainability, and optimal performance.`) : '';
+  const isPrototype = project?.name === 'SmartApply';
+
+  return (
+    <AnimatePresence>
+      {project && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/80 backdrop-blur-xl"
+            onClick={onClose}
+          />
+
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.97 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 280, mass: 0.8 }}
+            style={{ willChange: 'transform, opacity' }}
+            className="relative z-10 w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-3xl bg-gradient-to-b from-neutral-900 to-black border border-white/10 shadow-2xl shadow-blue-500/10"
+          >
+            <button
+              onClick={onClose}
+              aria-label="Close"
+              className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/80 hover:border-white/30 transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="relative h-64 md:h-80 overflow-hidden rounded-t-3xl">
+              {project.image ? (
+                <motion.img
+                  initial={{ scale: 1.1 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                  src={project.image}
+                  alt={project.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className={`w-full h-full ${project.gradient} opacity-60`} />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/40 to-transparent" />
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute bottom-0 left-0 right-0 p-6 md:p-8"
+              >
+                <span className="inline-block text-xs text-white/70 uppercase tracking-[0.2em] font-medium px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-3">
+                  {project.category}
+                </span>
+                <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+                  {project.name}
+                </h2>
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.25, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+              className="p-6 md:p-8"
+            >
+              <div className="flex flex-wrap gap-2 mb-6">
+                {project.tags.map((tag, i) => (
+                  <span key={i} className="text-xs bg-blue-500/10 text-blue-300 border border-blue-500/20 px-3 py-1.5 rounded-full">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <p className="text-white/75 leading-relaxed text-base md:text-lg mb-8">
+                {description}
+              </p>
+
+              <div className="flex items-center gap-3">
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group inline-flex items-center gap-2 bg-white text-black font-medium px-6 py-3 rounded-full hover:bg-blue-400 hover:text-white transition-all duration-300"
+                  >
+                    Visit Website
+                    <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform" />
+                  </a>
+                )}
+                {isPrototype && (
+                  <span className="inline-flex items-center gap-2 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-full">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
+                    </span>
+                    Prototype · Backend in progress
+                  </span>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -1455,7 +1723,7 @@ function ContactSection() {
 }
 
 // Footer Section with animations
-function FooterSection() {
+function FooterSection({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
@@ -1561,22 +1829,84 @@ function FooterSection() {
           className="flex flex-col md:flex-row justify-between items-center gap-4 mt-8 pt-8 border-t border-black/10"
         >
           <p className="text-sm text-black/40">© 2026 by Charlene Athena.</p>
-          <motion.a 
-            href="#" 
+          <motion.button
+            onClick={onOpenPrivacy}
             whileHover={{ x: 5 }}
-            className="text-sm text-black/40 hover:text-black transition-colors"
+            className="text-sm text-black/40 hover:text-black transition-colors cursor-pointer"
           >
             Privacy Policy
-          </motion.a>
+          </motion.button>
         </motion.div>
       </div>
     </footer>
   );
 }
 
+// Shared animated background for Tools → Work → Recent Works
+function MidSectionsBackground({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative overflow-hidden bg-[#050509]">
+      {/* Base radial gradient */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 80% 60% at 20% 10%, rgba(88, 28, 135, 0.35) 0%, transparent 55%),' +
+            'radial-gradient(ellipse 70% 50% at 85% 40%, rgba(29, 78, 216, 0.28) 0%, transparent 60%),' +
+            'radial-gradient(ellipse 90% 70% at 50% 100%, rgba(59, 7, 100, 0.35) 0%, transparent 65%)',
+        }}
+      />
+
+      {/* Drifting blur orbs */}
+      <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden">
+        <motion.div
+          className="absolute top-[10%] left-[5%] w-[600px] h-[600px] rounded-full blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(139, 92, 246, 0.25), transparent 70%)', willChange: 'transform' }}
+          animate={{ x: [0, 80, -40, 0], y: [0, 60, 30, 0] }}
+          transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute top-[40%] right-[0%] w-[700px] h-[700px] rounded-full blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(59, 130, 246, 0.2), transparent 70%)', willChange: 'transform' }}
+          animate={{ x: [0, -100, -50, 0], y: [0, 50, -40, 0] }}
+          transition={{ duration: 35, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute bottom-[5%] left-[30%] w-[550px] h-[550px] rounded-full blur-3xl"
+          style={{ background: 'radial-gradient(circle, rgba(168, 85, 247, 0.22), transparent 70%)', willChange: 'transform' }}
+          animate={{ x: [0, 60, -30, 0], y: [0, -40, 20, 0] }}
+          transition={{ duration: 32, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </div>
+
+      {/* Subtle grid overlay */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px),' +
+            'linear-gradient(to bottom, rgba(255,255,255,0.5) 1px, transparent 1px)',
+          backgroundSize: '64px 64px',
+          maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 85%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 85%)',
+        }}
+      />
+
+      {/* Top / bottom fade into neighboring sections */}
+      <div aria-hidden className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-black to-transparent pointer-events-none z-[1]" />
+      <div aria-hidden className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent pointer-events-none z-[1]" />
+
+      <div className="relative z-[2]">{children}</div>
+    </div>
+  );
+}
+
 // Main App Component
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
 
   const handleNavigate = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -1598,15 +1928,18 @@ function App() {
         <Toaster position="top-right" theme="dark" richColors />
         
         {!isLoading && <Navigation onNavigate={handleNavigate} />}
+        <PrivacyPolicy isOpen={isPrivacyOpen} onClose={() => setIsPrivacyOpen(false)} />
         <HeroSection isLoading={isLoading} />
         <ProjectsShowcase />
         <AboutSection />
         <ToolsStackSection />
-        <WorkExperienceSection />
-        <RecentWorksSection />
+        <MidSectionsBackground>
+          <WorkExperienceSection />
+          <RecentWorksSection />
+        </MidSectionsBackground>
         <ServicesSection />
         <ContactSection />
-        <FooterSection />
+        <FooterSection onOpenPrivacy={() => setIsPrivacyOpen(true)} />
       </div>
     </>
   );
