@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react';
+import { useRenderGate, makeFrameLimiter } from '@/hooks/useRenderGate';
 import { Renderer, Program, Mesh, Triangle, Vec2 } from 'ogl';
 
 const vertex = `
@@ -93,12 +94,13 @@ export default function DarkVeil({
   resolutionScale = 1
 }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const active = useRenderGate(ref);
   useEffect(() => {
     const canvas = ref.current as HTMLCanvasElement;
     const parent = canvas.parentElement as HTMLElement;
 
     const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 2),
+      dpr: Math.min(window.devicePixelRatio, 1.5),
       canvas
     });
 
@@ -134,7 +136,11 @@ export default function DarkVeil({
     const start = performance.now();
     let frame = 0;
 
-    const loop = () => {
+    const shouldDraw = makeFrameLimiter(30);
+
+    const loop = (now: number) => {
+      frame = requestAnimationFrame(loop);
+      if (!active.current || !shouldDraw(now)) return;
       program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed;
       program.uniforms.uHueShift.value = hueShift;
       program.uniforms.uNoise.value = noiseIntensity;
@@ -142,15 +148,15 @@ export default function DarkVeil({
       program.uniforms.uScanFreq.value = scanlineFrequency;
       program.uniforms.uWarp.value = warpAmount;
       renderer.render({ scene: mesh });
-      frame = requestAnimationFrame(loop);
     };
 
-    loop();
+    frame = requestAnimationFrame(loop);
 
     return () => {
       cancelAnimationFrame(frame);
       window.removeEventListener('resize', resize);
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-  }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
+  }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale, active]);
   return <canvas ref={ref} className="w-full h-full block" />;
 }

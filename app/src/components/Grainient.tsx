@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useRenderGate, makeFrameLimiter } from '@/hooks/useRenderGate';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
 import './Grainient.css';
 
@@ -151,6 +152,7 @@ const Grainient: React.FC<GrainientProps> = ({
   className = ''
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const active = useRenderGate(containerRef);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -159,7 +161,7 @@ const Grainient: React.FC<GrainientProps> = ({
       webgl: 2,
       alpha: true,
       antialias: false,
-      dpr: Math.min(window.devicePixelRatio || 1, 2)
+      dpr: Math.min(window.devicePixelRatio || 1, 1.5)
     });
 
     const gl = renderer.gl;
@@ -220,10 +222,12 @@ const Grainient: React.FC<GrainientProps> = ({
 
     let raf = 0;
     const t0 = performance.now();
+    const shouldDraw = makeFrameLimiter(30);
     const loop = (t: number) => {
+      raf = requestAnimationFrame(loop);
+      if (!active.current || !shouldDraw(t)) return;
       (program.uniforms.iTime as { value: number }).value = (t - t0) * 0.001;
       renderer.render({ scene: mesh });
-      raf = requestAnimationFrame(loop);
     };
     raf = requestAnimationFrame(loop);
 
@@ -256,6 +260,7 @@ const Grainient: React.FC<GrainientProps> = ({
     centerX,
     centerY,
     zoom,
+    active,
     color1,
     color2,
     color3

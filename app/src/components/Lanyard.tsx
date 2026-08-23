@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import { useRenderGate } from '@/hooks/useRenderGate';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import {
@@ -35,6 +36,11 @@ export default function Lanyard({
   transparent = true
 }: LanyardProps) {
   const [isMobile, setIsMobile] = useState<boolean>(() => typeof window !== 'undefined' && window.innerWidth < 768);
+  const hostRef = useRef<HTMLDivElement>(null);
+  const gate = useRenderGate(hostRef, '0px');
+  // Physics plus a render pass is the most expensive thing on the page; once the
+  // hero scrolls away there is nothing to see, so stop stepping the simulation.
+  const [running, setRunning] = useState(true);
 
   useEffect(() => {
     const handleResize = (): void => setIsMobile(window.innerWidth < 768);
@@ -42,11 +48,19 @@ export default function Lanyard({
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setRunning(prev => (prev === gate.current ? prev : gate.current));
+    }, 250);
+    return () => window.clearInterval(id);
+  }, [gate]);
+
   return (
-    <div className="relative w-full h-screen flex justify-center items-center transform scale-100 origin-center pointer-events-auto">
+    <div ref={hostRef} className="relative w-full h-screen flex justify-center items-center transform scale-100 origin-center pointer-events-auto">
       <Canvas
         camera={{ position, fov }}
-        dpr={[1, isMobile ? 1.5 : 2]}
+        frameloop={running ? 'always' : 'never'}
+        dpr={[1, isMobile ? 1.25 : 1.5]}
         gl={{ alpha: transparent }}
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)}
       >

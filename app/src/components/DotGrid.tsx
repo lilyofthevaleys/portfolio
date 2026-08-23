@@ -1,5 +1,6 @@
 'use client';
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
+import { useRenderGate } from '@/hooks/useRenderGate';
 import { gsap } from 'gsap';
 
 const throttle = (func: (...args: any[]) => void, limit: number) => {
@@ -64,6 +65,7 @@ const DotGrid: React.FC<DotGridProps> = ({
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const active = useRenderGate(wrapperRef);
   const dotsRef = useRef<Dot[]>([]);
   const pointerRef = useRef({
     x: 0,
@@ -93,7 +95,7 @@ const DotGrid: React.FC<DotGridProps> = ({
     if (!wrap || !canvas) return;
 
     const { width, height } = wrap.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -132,14 +134,35 @@ const DotGrid: React.FC<DotGridProps> = ({
     let rafId: number;
     const proxSq = proximity * proximity;
 
+    // Cached once: getContext is not free, and this ran on every frame.
+    const canvasEl = canvasRef.current;
+    if (!canvasEl) return;
+    const ctx = canvasEl.getContext('2d');
+    if (!ctx) return;
+
+    // The grid is static unless the pointer moves or a click shockwave is still
+    // settling. Redrawing thousands of dots on an idle page was pure waste.
+    let lastX = Number.NaN;
+    let lastY = Number.NaN;
+
     const draw = () => {
+      rafId = requestAnimationFrame(draw);
+      if (!active.current) return;
+
       const canvas = canvasRef.current;
       if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
+
+      const { x: pxNow, y: pyNow } = pointerRef.current;
+      const pointerMoved = pxNow !== lastX || pyNow !== lastY;
+      const settling = dotsRef.current.some(d => d.xOffset !== 0 || d.yOffset !== 0);
+      if (!pointerMoved && !settling) return;
+      lastX = pxNow;
+      lastY = pyNow;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const { x: px, y: py } = pointerRef.current;
+      const px = pxNow;
+      const py = pyNow;
 
       for (const dot of dotsRef.current) {
         const ox = dot.cx + dot.xOffset;
@@ -165,12 +188,11 @@ const DotGrid: React.FC<DotGridProps> = ({
         ctx.restore();
       }
 
-      rafId = requestAnimationFrame(draw);
     };
 
-    draw();
+    rafId = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(rafId);
-  }, [proximity, baseColor, activeRgb, baseRgb, circlePath]);
+  }, [proximity, baseColor, activeRgb, baseRgb, circlePath, active]);
 
   useEffect(() => {
     buildGrid();

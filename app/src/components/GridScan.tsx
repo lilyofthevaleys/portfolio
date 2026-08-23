@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useRenderGate } from '@/hooks/useRenderGate';
 import { EffectComposer, RenderPass, EffectPass, BloomEffect, ChromaticAberrationEffect } from 'postprocessing';
 import * as THREE from 'three';
 import * as faceapi from 'face-api.js';
@@ -335,6 +336,7 @@ export const GridScan: React.FC<GridScanProps> = ({
   style
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const active = useRenderGate(containerRef);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -456,7 +458,7 @@ export const GridScan: React.FC<GridScanProps> = ({
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     rendererRef.current = renderer;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.NoToneMapping;
@@ -578,11 +580,13 @@ export const GridScan: React.FC<GridScanProps> = ({
       material.uniforms.uYaw.value = THREE.MathUtils.clamp(yawCurrent.current * yawScale, -0.6, 0.6);
 
       material.uniforms.iTime.value = now / 1000;
-      renderer.clear(true, true, true);
-      if (composerRef.current) {
-        composerRef.current.render(dt);
-      } else {
-        renderer.render(scene, camera);
+      if (active.current) {
+        renderer.clear(true, true, true);
+        if (composerRef.current) {
+          composerRef.current.render(dt);
+        } else {
+          renderer.render(scene, camera);
+        }
       }
       rafRef.current = requestAnimationFrame(tick);
     };

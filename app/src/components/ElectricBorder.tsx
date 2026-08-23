@@ -3,6 +3,7 @@
 // https://codepen.io/BalintFerenczy/pen/KwdoyEN
 
 import React, { useEffect, useRef, useCallback } from 'react';
+import { useRenderGate } from '@/hooks/useRenderGate';
 import type { CSSProperties, ReactNode } from 'react';
 
 function hexToRgba(hex: string, alpha: number = 1): string {
@@ -44,6 +45,7 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const active = useRenderGate(containerRef);
   const animationRef = useRef<number | null>(null);
   const timeRef = useRef(0);
   const lastFrameTimeRef = useRef(0);
@@ -201,7 +203,7 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
       const width = rect.width + borderOffset * 2;
       const height = rect.height + borderOffset * 2;
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       canvas.width = width * dpr;
       canvas.height = height * dpr;
       canvas.style.width = `${width}px`;
@@ -216,11 +218,19 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
     const drawElectricBorder = (currentTime: number) => {
       if (!canvas || !ctx) return;
 
+      // Three of these run at once. Each frame walks the border computing ten
+      // octaves of noise per point, so idle instances are worth skipping.
+      if (!active.current) {
+        lastFrameTimeRef.current = currentTime;
+        animationRef.current = requestAnimationFrame(drawElectricBorder);
+        return;
+      }
+
       const deltaTime = (currentTime - lastFrameTimeRef.current) / 1000;
       timeRef.current += deltaTime * speed;
       lastFrameTimeRef.current = currentTime;
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.scale(dpr, dpr);
@@ -302,7 +312,7 @@ const ElectricBorder: React.FC<ElectricBorderProps> = ({
       }
       resizeObserver.disconnect();
     };
-  }, [color, speed, chaos, thickness, borderRadius, octavedNoise, getRoundedRectPoint]);
+  }, [color, speed, chaos, thickness, borderRadius, octavedNoise, getRoundedRectPoint, active]);
 
   return (
     <div

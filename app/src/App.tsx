@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { Menu, X, ArrowUpRight, Code2, Rocket, Zap, Palette, Briefcase, ClipboardCheck, Wrench } from 'lucide-react';
 import { SiGoogleappsscript, SiAmazonwebservices, SiTrello, SiAsana, SiDiscord, SiCivicrm } from 'react-icons/si';
 import { Button } from '@/components/ui/button';
@@ -10,19 +10,26 @@ import gsap from 'gsap';
 import LoadingScreen from '@/components/LoadingScreen';
 import DarkVeil from '@/components/DarkVeil';
 import DotGrid from '@/components/DotGrid';
-import Lanyard from '@/components/Lanyard';
+
 import SpotlightCard from '@/components/SpotlightCard';
 import ElectricBorder from '@/components/ElectricBorder';
 import { FallingPattern } from '@/components/FallingPattern';
 import CardFlip from '@/components/CardFlip';
-import { IconCloudDemo } from '@/components/IconCloudDemo';
 import { Timeline } from '@/components/Timeline';
-import Grainient from '@/components/Grainient';
-import GridScan from '@/components/GridScan';
-import eternaLogo from '@/assets/lanyard/images/eterna.png';
-import webstartiomLogo from '@/assets/lanyard/images/webstartiom.png';
-import outlierLogo from '@/assets/lanyard/images/outlier.png';
-import inpaqLogo from '@/assets/lanyard/images/inpaq.png';
+
+// Deferred: these pull in three.js, the rapier physics engine and the ogl
+// renderer. Loading them up front meant parsing megabytes of JS before the page
+// could paint. They render exactly as before, just fetched when first needed.
+const Lanyard = lazy(() => import('@/components/Lanyard'));
+const Grainient = lazy(() => import('@/components/Grainient'));
+const GridScan = lazy(() => import('@/components/GridScan'));
+const IconCloudDemo = lazy(() =>
+  import('@/components/IconCloudDemo').then(m => ({ default: m.IconCloudDemo }))
+);
+import eternaLogo from '@/assets/lanyard/images/eterna.jpg';
+import webstartiomLogo from '@/assets/lanyard/images/webstartiom.jpg';
+import outlierLogo from '@/assets/lanyard/images/outlier.jpg';
+import inpaqLogo from '@/assets/lanyard/images/inpaq.jpg';
 
 const njcpImage = new URL('./assets/lanyard/images/2304x1296.webp', import.meta.url).href;
 const sionImage = new URL('./assets/lanyard/images/further_front.jpg', import.meta.url).href;
@@ -31,12 +38,23 @@ const terraImage = new URL('./assets/lanyard/images/mineral-processing-facility.
 const merdekaImage = new URL('./assets/lanyard/images/830266_1200.jpg', import.meta.url).href;
 const decisionImage = new URL('./assets/lanyard/images/WhatsApp Image 2026-02-26 at 08.36.15.jpeg', import.meta.url).href;
 
-const fullStackImage = new URL('./assets/lanyard/images/gifs/fullstack.gif', import.meta.url).href;
-const automationImage = new URL('./assets/lanyard/images/gifs/automation.gif', import.meta.url).href;
-const devopsImage = new URL('./assets/lanyard/images/gifs/devops.gif', import.meta.url).href;
+// Service clips: encoded as video instead of GIF. GIFs decode frame-by-frame on the
+// main thread, which is what made this section stutter; video decode is GPU-backed.
+const fullStackVideo = {
+  webm: new URL('./assets/lanyard/images/gifs/fullstack.webm', import.meta.url).href,
+  mp4: new URL('./assets/lanyard/images/gifs/fullstack.mp4', import.meta.url).href,
+};
+const automationVideo = {
+  webm: new URL('./assets/lanyard/images/gifs/automation.webm', import.meta.url).href,
+  mp4: new URL('./assets/lanyard/images/gifs/automation.mp4', import.meta.url).href,
+};
+const devopsVideo = {
+  webm: new URL('./assets/lanyard/images/gifs/devops.webm', import.meta.url).href,
+  mp4: new URL('./assets/lanyard/images/gifs/devops.mp4', import.meta.url).href,
+};
 
-const eternaAcademyImage = new URL('./assets/lanyard/images/eternaacademy.png', import.meta.url).href;
-const eternaPortalImage = new URL('./assets/lanyard/images/eternaportal.png', import.meta.url).href;
+const eternaAcademyImage = new URL('./assets/lanyard/images/eternaacademy.jpg', import.meta.url).href;
+const eternaPortalImage = new URL('./assets/lanyard/images/eternaportal.jpg', import.meta.url).href;
 const smartApplyImage = new URL('./assets/lanyard/images/SmartApply.jpeg', import.meta.url).href;
 
 // Animation variants with proper types
@@ -455,7 +473,8 @@ function HeroSection({ isLoading }: { isLoading: boolean }) {
             opacity: [0.2, 0.3, 0.2]
           }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full bg-gradient-to-r from-blue-600/30 to-purple-600/30 blur-[120px]"
+          style={{ willChange: 'transform, opacity' }}
+          className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full [background:radial-gradient(circle,rgba(37,99,235,0.30)_0%,rgba(147,51,234,0.18)_45%,transparent_70%)]"
         />
         <motion.div 
           animate={{ 
@@ -463,14 +482,17 @@ function HeroSection({ isLoading }: { isLoading: boolean }) {
             opacity: [0.15, 0.25, 0.15]
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full bg-gradient-to-r from-pink-600/20 to-purple-600/20 blur-[100px]"
+          style={{ willChange: 'transform, opacity' }}
+          className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full [background:radial-gradient(circle,rgba(219,39,119,0.22)_0%,rgba(147,51,234,0.14)_45%,transparent_70%)]"
         />
       </div>
 
       {/* Lanyard on the right */}
       {!isLoading && (
         <div className="absolute right-0 top-0 w-full md:w-1/3 h-full z-50 pointer-events-auto" style={{ transform: 'translateX(-25%)' }}>
-          <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} transparent={true} />
+          <Suspense fallback={null}>
+            <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} transparent={true} />
+          </Suspense>
         </div>
       )}
 
@@ -821,7 +843,9 @@ function ToolsStackSection() {
           className="flex justify-center items-center mb-16"
         >
           <div className="w-full max-w-3xl h-[500px] flex items-center justify-center">
-            <IconCloudDemo />
+            <Suspense fallback={<div className="min-h-[300px]" />}>
+              <IconCloudDemo />
+            </Suspense>
           </div>
         </motion.div>
 
@@ -892,7 +916,7 @@ function WorkExperienceSection() {
               ))}
             </div>
             <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
-              <img src={eternaLogo} alt="Eterna Indonesia" className="w-full h-64 object-cover" />
+              <img loading="lazy" decoding="async" src={eternaLogo} alt="Eterna Indonesia" className="w-full h-64 object-cover" />
             </div>
             <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
           </div>
@@ -922,7 +946,7 @@ function WorkExperienceSection() {
               ))}
             </div>
             <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
-              <img src={webstartiomLogo} alt="Webstartiom" className="w-full h-64 object-cover" />
+              <img loading="lazy" decoding="async" src={webstartiomLogo} alt="Webstartiom" className="w-full h-64 object-cover" />
             </div>
             <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
           </div>
@@ -952,7 +976,7 @@ function WorkExperienceSection() {
               ))}
             </div>
             <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
-              <img src={outlierLogo} alt="Outlier AI" className="w-full h-64 object-cover" />
+              <img loading="lazy" decoding="async" src={outlierLogo} alt="Outlier AI" className="w-full h-64 object-cover" />
             </div>
             <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
           </div>
@@ -982,7 +1006,7 @@ function WorkExperienceSection() {
               ))}
             </div>
             <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
-              <img src={inpaqLogo} alt="INPAQ Technology" className="w-full h-64 object-cover" />
+              <img loading="lazy" decoding="async" src={inpaqLogo} alt="INPAQ Technology" className="w-full h-64 object-cover" />
             </div>
             <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
           </div>
@@ -1064,7 +1088,7 @@ function RecentWorksSection() {
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     className="relative h-48 w-full"
                   >
-                    <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
+                    <img loading="lazy" decoding="async" src={project.image} alt={project.name} className="w-full h-full object-cover" />
                     <motion.div 
                       initial={{ opacity: 0.7 }}
                       whileInView={{ opacity: 0.7 }}
@@ -1285,7 +1309,7 @@ function ServicesSection() {
       gradient: 'from-purple-500 to-pink-500',
       bgColor: 'bg-purple-950',
       icon: Code2,
-      image: fullStackImage,
+      video: fullStackVideo,
     },
     {
       title: 'AUTOMATION & WORKFLOW DESIGN',
@@ -1294,7 +1318,7 @@ function ServicesSection() {
       gradient: 'from-cyan-500 to-blue-500',
       bgColor: 'bg-cyan-950',
       icon: Zap,
-      image: automationImage,
+      video: automationVideo,
     },
     {
       title: 'DEVOPS & SYSTEMS DOCUMENTATION',
@@ -1303,7 +1327,7 @@ function ServicesSection() {
       gradient: 'from-orange-500 to-red-500',
       bgColor: 'bg-orange-950',
       icon: Wrench,
-      image: devopsImage,
+      video: devopsVideo,
     },
   ];
 
@@ -1311,6 +1335,7 @@ function ServicesSection() {
     <section ref={containerRef} id="services" className="relative bg-black" style={{ height: `${(services.length + 1) * 100}vh` }}>
       {/* Grainient Background */}
       <div className="absolute inset-0 z-0">
+        <Suspense fallback={null}>
         <Grainient
           color1="#d357fe"
           color2="#2e073e"
@@ -1335,6 +1360,7 @@ function ServicesSection() {
           centerY={0}
           zoom={0.9}
         />
+        </Suspense>
       </div>
       {/* Section Header - Sticky */}
       <div className="sticky top-0 h-screen flex flex-col justify-start pt-20 z-0">
@@ -1395,7 +1421,7 @@ interface ServiceCardProps {
     gradient: string;
     bgColor: string;
     icon: any;
-    image: string;
+    video: { webm: string; mp4: string };
   };
   index: number;
   cardY: any;
@@ -1519,12 +1545,20 @@ function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceC
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                   {/* Image container with gradient overlay */}
                   <div className="relative aspect-square bg-black/20">
-                    <img 
-                      src={service.image} 
-                      alt={service.title}
+                    <video
+                      key={service.video.webm}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      preload="metadata"
+                      aria-label={service.title}
                       className="w-full h-full object-cover rounded-2xl"
                       style={{ mixBlendMode: 'multiply' }}
-                    />
+                    >
+                      <source src={service.video.webm} type="video/webm" />
+                      <source src={service.video.mp4} type="video/mp4" />
+                    </video>
                     {/* Subtle gradient overlay */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} opacity-20 mix-blend-overlay rounded-2xl`} />
                   </div>
@@ -1602,6 +1636,7 @@ function ContactSection() {
     <section ref={ref} id="contact" className="bg-black py-20 relative overflow-hidden">
       {/* GridScan Background */}
       <div className="absolute inset-0 z-0">
+        <Suspense fallback={null}>
         <GridScan
           sensitivity={0.55}
           lineThickness={1}
@@ -1614,6 +1649,7 @@ function ContactSection() {
           chromaticAberration={0.002}
           noiseIntensity={0.01}
         />
+        </Suspense>
       </div>
       {/* Background gradient orbs */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-[100px] z-[1]" />
