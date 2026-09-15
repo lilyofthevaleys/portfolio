@@ -16,6 +16,7 @@ import ElectricBorder from '@/components/ElectricBorder';
 import { FallingPattern } from '@/components/FallingPattern';
 import CardFlip from '@/components/CardFlip';
 import { Timeline } from '@/components/Timeline';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Deferred: these pull in three.js, the rapier physics engine and the ogl
 // renderer. Loading them up front meant parsing megabytes of JS before the page
@@ -274,7 +275,7 @@ function Navigation({ onNavigate }: { onNavigate: (section: string) => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1, duration: 0.6 }}
         onClick={() => setIsOpen(true)}
-        className="fixed top-6 right-6 z-50 flex items-center gap-2 text-white/80 hover:text-white transition-colors bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10"
+        className="fixed top-4 right-4 md:top-6 md:right-6 z-50 flex items-center gap-2 text-white/80 hover:text-white transition-colors bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10"
       >
         <span className="text-sm font-medium">Menu</span>
         <Menu className="w-5 h-5" />
@@ -371,6 +372,7 @@ function Navigation({ onNavigate }: { onNavigate: (section: string) => void }) {
 
 // Hero Section with parallax flowers
 function HeroSection({ isLoading }: { isLoading: boolean }) {
+  const isMobile = useIsMobile();
   const { scrollY } = useScroll();
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const scale = useTransform(scrollY, [0, 500], [1, 0.9]);
@@ -487,9 +489,10 @@ function HeroSection({ isLoading }: { isLoading: boolean }) {
         />
       </div>
 
-      {/* Lanyard on the right */}
-      {!isLoading && (
-        <div className="absolute right-0 top-0 w-full md:w-1/3 h-full z-50 pointer-events-auto" style={{ transform: 'translateX(-25%)' }}>
+      {/* Lanyard on the right — desktop only. On phones it covered the name and
+          the three.js + physics chunk isn't worth downloading, so skip it entirely. */}
+      {!isLoading && !isMobile && (
+        <div className="absolute right-0 top-0 w-1/3 h-full z-50 pointer-events-auto" style={{ transform: 'translateX(-25%)' }}>
           <Suspense fallback={null}>
             <Lanyard position={[0, 0, 20]} gravity={[0, -40, 0]} transparent={true} />
           </Suspense>
@@ -499,7 +502,7 @@ function HeroSection({ isLoading }: { isLoading: boolean }) {
       {/* Content */}
       <motion.div 
         style={{ opacity, scale }}
-        className="relative z-10 w-full px-6 md:px-12 lg:px-20 py-20"
+        className="relative z-10 w-full px-6 md:px-12 lg:px-20 pt-24 pb-28 md:py-20"
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid gap-12 items-center">
@@ -512,14 +515,14 @@ function HeroSection({ isLoading }: { isLoading: boolean }) {
               <motion.h1 
                 ref={charleneRef}
                 variants={fadeInUp}
-                className="text-6xl md:text-8xl lg:text-9xl font-black text-white leading-none tracking-tight text-glow"
+                className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black text-white leading-none tracking-tight text-glow"
               >
                 {splitText('CHARLENE')}
               </motion.h1>
               <motion.h1 
                 ref={athenaRef}
                 variants={fadeInUp}
-                className="text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tight italic"
+                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black leading-none tracking-tight italic"
               >
                 {splitText('ATHENA', '#a78bfa')}
               </motion.h1>
@@ -527,7 +530,7 @@ function HeroSection({ isLoading }: { isLoading: boolean }) {
               {/* Job Title */}
               <motion.p
                 variants={fadeInUp}
-                className="mt-6 text-lg md:text-xl text-white/80 font-light"
+                className="mt-4 md:mt-6 text-base md:text-xl text-white/80 font-light"
               >
                 Technical Associate <span className="text-purple-400">@</span> Eterna Indonesia
               </motion.p>
@@ -539,7 +542,7 @@ function HeroSection({ isLoading }: { isLoading: boolean }) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="mt-64 flex items-center gap-4"
+            className="mt-16 md:mt-64 flex items-center gap-4"
           >
             <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-400/30 to-transparent" style={{ boxShadow: '0 0 10px rgba(167,139,250,0.5)' }} />
             <span 
@@ -554,7 +557,7 @@ function HeroSection({ isLoading }: { isLoading: boolean }) {
       </motion.div>
 
       {/* Marquee */}
-      <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm border-t border-white/10 py-4 overflow-hidden">
+      <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm border-t border-white/10 py-3 md:py-4 overflow-hidden">
         <motion.div
           className="flex w-max"
           animate={{ x: [0, -2000] }}
@@ -569,20 +572,20 @@ function HeroSection({ isLoading }: { isLoading: boolean }) {
         >
           {[...Array(2)].map((_, i) => (
             <div key={i} className="flex whitespace-nowrap shrink-0">
-              <span className="text-2xl md:text-4xl font-bold text-white mx-8">BUILDING TOMORROW'S SYSTEMS TODAY.</span>
-              <span className="text-2xl md:text-4xl font-bold text-blue-400 mx-4">→</span>
-              <span className="text-2xl md:text-4xl font-bold text-white mx-8">FULL-STACK ENGINEER</span>
-              <span className="text-2xl md:text-4xl font-bold text-purple-400 mx-4">→</span>
-              <span className="text-2xl md:text-4xl font-bold text-white mx-8">DEVOPS & CI/CD</span>
-              <span className="text-2xl md:text-4xl font-bold text-pink-400 mx-4">→</span>
-              <span className="text-2xl md:text-4xl font-bold text-white mx-8">AUTOMATION DEVELOPER</span>
-              <span className="text-2xl md:text-4xl font-bold text-cyan-400 mx-4">→</span>
-              <span className="text-2xl md:text-4xl font-bold text-white mx-8">UI/UX DESIGNER</span>
-              <span className="text-2xl md:text-4xl font-bold text-blue-400 mx-4">→</span>
-              <span className="text-2xl md:text-4xl font-bold text-white mx-8">PROJECT MANAGER</span>
-              <span className="text-2xl md:text-4xl font-bold text-purple-400 mx-4">→</span>
-              <span className="text-2xl md:text-4xl font-bold text-white mx-8">QA TESTER</span>
-              <span className="text-2xl md:text-4xl font-bold text-pink-400 mx-4">→</span>
+              <span className="text-lg md:text-4xl font-bold text-white mx-4 md:mx-8">BUILDING TOMORROW'S SYSTEMS TODAY.</span>
+              <span className="text-lg md:text-4xl font-bold text-blue-400 mx-4">→</span>
+              <span className="text-lg md:text-4xl font-bold text-white mx-4 md:mx-8">FULL-STACK ENGINEER</span>
+              <span className="text-lg md:text-4xl font-bold text-purple-400 mx-4">→</span>
+              <span className="text-lg md:text-4xl font-bold text-white mx-4 md:mx-8">DEVOPS & CI/CD</span>
+              <span className="text-lg md:text-4xl font-bold text-pink-400 mx-4">→</span>
+              <span className="text-lg md:text-4xl font-bold text-white mx-4 md:mx-8">AUTOMATION DEVELOPER</span>
+              <span className="text-lg md:text-4xl font-bold text-cyan-400 mx-4">→</span>
+              <span className="text-lg md:text-4xl font-bold text-white mx-4 md:mx-8">UI/UX DESIGNER</span>
+              <span className="text-lg md:text-4xl font-bold text-blue-400 mx-4">→</span>
+              <span className="text-lg md:text-4xl font-bold text-white mx-4 md:mx-8">PROJECT MANAGER</span>
+              <span className="text-lg md:text-4xl font-bold text-purple-400 mx-4">→</span>
+              <span className="text-lg md:text-4xl font-bold text-white mx-4 md:mx-8">QA TESTER</span>
+              <span className="text-lg md:text-4xl font-bold text-pink-400 mx-4">→</span>
             </div>
           ))}
         </motion.div>
@@ -652,7 +655,7 @@ function ProjectsShowcase() {
             dragConstraints={{ left: -2500, right: 100 }}
             dragElastic={0.05}
             dragTransition={{ bounceStiffness: 300, bounceDamping: 20 }}
-            className="flex gap-6 cursor-grab active:cursor-grabbing"
+            className="flex gap-4 md:gap-6 cursor-grab active:cursor-grabbing"
             style={{ touchAction: 'none' }}
           >
             {duplicatedRoles.map((role, index) => {
@@ -663,16 +666,16 @@ function ProjectsShowcase() {
                   initial={{ opacity: 0, y: 50 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ delay: (index % 6) * 0.1, duration: 0.6 }}
-                  className="flex-shrink-0 w-96"
+                  className="flex-shrink-0 w-[80vw] sm:w-96"
                   style={{ pointerEvents: 'auto' }}
                 >
-                  <SpotlightCard spotlightColor={role.spotlightColor} className="h-48 pointer-events-auto">
-                    <div className="flex items-center gap-4 h-full pointer-events-none">
+                  <SpotlightCard spotlightColor={role.spotlightColor} className="h-full min-h-48 p-6 md:p-8 pointer-events-auto">
+                    <div className="flex items-start sm:items-center gap-4 h-full pointer-events-none">
                       <div className="flex-shrink-0">
-                        <Icon className="w-10 h-10 text-white" />
+                        <Icon className="w-8 h-8 md:w-10 md:h-10 text-white" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-xl font-bold text-white mb-2">{role.title}</h3>
+                        <h3 className="text-lg md:text-xl font-bold text-white mb-2">{role.title}</h3>
                         <p className="text-neutral-400 text-sm leading-relaxed">{role.description}</p>
                       </div>
                     </div>
@@ -710,7 +713,7 @@ function AboutSection() {
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl md:text-5xl font-bold text-black/90 text-center mb-16 max-w-4xl mx-auto leading-tight"
+          className="text-2xl sm:text-3xl md:text-5xl font-bold text-black/90 text-center mb-10 md:mb-16 max-w-4xl mx-auto leading-tight"
         >
           AS A TECHNICAL ASSOCIATE AND FULL-STACK ENGINEER, I SPECIALIZE IN BUILDING SOLUTIONS THAT ARE BOTH{' '}
           <span className="text-gradient">SCALABLE</span> AND <span className="text-gradient-blue">EFFICIENT</span>
@@ -822,7 +825,7 @@ function ToolsStackSection() {
           initial={{ opacity: 0, x: -50 }}
           animate={isInView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl md:text-6xl font-bold text-white mb-4"
+          className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-3 md:mb-4"
         >
           Tools & <span className="text-gradient">Stack</span>
         </motion.h2>
@@ -830,7 +833,7 @@ function ToolsStackSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="text-white/60 mb-12 max-w-xl"
+          className="text-white/60 text-sm md:text-base mb-6 md:mb-12 max-w-xl"
         >
           Technologies I use to bring ideas to life
         </motion.p>
@@ -840,9 +843,9 @@ function ToolsStackSection() {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="flex justify-center items-center mb-16"
+          className="flex justify-center items-center mb-6 md:mb-16"
         >
-          <div className="w-full max-w-3xl h-[500px] flex items-center justify-center">
+          <div className="w-full max-w-3xl h-[300px] sm:h-[400px] md:h-[500px] flex items-center justify-center">
             <Suspense fallback={<div className="min-h-[300px]" />}>
               <IconCloudDemo />
             </Suspense>
@@ -854,7 +857,7 @@ function ToolsStackSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="-mt-8 overflow-hidden"
+          className="md:-mt-8 overflow-hidden"
         >
           <style>{`
             .logo-glow svg {
@@ -896,7 +899,7 @@ function WorkExperienceSection() {
     {
       title: '2025',
       content: (
-        <a href="https://www.eternaindonesia.com/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-blue-950 to-purple-950 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-blue-500/20 hover:shadow-2xl hover:-translate-y-1 group">
+        <a href="https://www.eternaindonesia.com/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-blue-950 to-purple-950 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-blue-500/20 hover:shadow-2xl hover:-translate-y-1 group">
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500 to-purple-600 opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-30 transition-opacity" />
           <div className="relative z-10">
             <div className="flex flex-wrap items-center gap-3 mb-3">
@@ -906,8 +909,8 @@ function WorkExperienceSection() {
               <span className="w-1 h-1 rounded-full bg-white/30" />
               <span className="text-sm text-white/50">Oct 2025 - Present</span>
             </div>
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-blue-300 transition-colors">Full-Stack Engineer & Systems Documentation Lead</h3>
-            <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">Authored comprehensive system documentation for the Merdeka client project. Contributed to DevOps operations including CI/CD pipeline configuration and deployment management. Developed QA test plans and built full-stack features using Next.js and React.</p>
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 group-hover:text-blue-300 transition-colors">Full-Stack Engineer & Systems Documentation Lead</h3>
+            <p className="text-white/70 text-sm sm:text-base md:text-lg leading-relaxed mb-5 md:mb-6">Authored comprehensive system documentation for the Merdeka client project. Contributed to DevOps operations including CI/CD pipeline configuration and deployment management. Developed QA test plans and built full-stack features using Next.js and React.</p>
             <div className="flex flex-wrap gap-2 mb-6">
               {['Next.js', 'React', 'DevOps', 'CI/CD', 'QA'].map((skill, i) => (
                 <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
@@ -915,8 +918,8 @@ function WorkExperienceSection() {
                 </span>
               ))}
             </div>
-            <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
-              <img loading="lazy" decoding="async" src={eternaLogo} alt="Eterna Indonesia" className="w-full h-64 object-cover" />
+            <div className="mt-4 md:mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
+              <img loading="lazy" decoding="async" src={eternaLogo} alt="Eterna Indonesia" className="w-full h-40 sm:h-56 md:h-64 object-cover" />
             </div>
             <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
           </div>
@@ -926,7 +929,7 @@ function WorkExperienceSection() {
     {
       title: '2025',
       content: (
-        <a href="https://webstartiom.com/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-orange-950 to-pink-950 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-orange-500/20 hover:shadow-2xl hover:-translate-y-1 group">
+        <a href="https://webstartiom.com/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-orange-950 to-pink-950 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-orange-500/20 hover:shadow-2xl hover:-translate-y-1 group">
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-orange-500 to-pink-500 opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-30 transition-opacity" />
           <div className="relative z-10">
             <div className="flex flex-wrap items-center gap-3 mb-3">
@@ -936,8 +939,8 @@ function WorkExperienceSection() {
               <span className="w-1 h-1 rounded-full bg-white/30" />
               <span className="text-sm text-white/50">Mar 2025 - Oct 2025</span>
             </div>
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-orange-300 transition-colors">Machine Learning Developer & Project Manager</h3>
-            <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">Managed multiple projects in Jira, overseeing timelines and deliverables. Developed and integrated APIs for AI-driven projects. Conducted web data scraping and provided client support while maintaining clear communication.</p>
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 group-hover:text-orange-300 transition-colors">Machine Learning Developer & Project Manager</h3>
+            <p className="text-white/70 text-sm sm:text-base md:text-lg leading-relaxed mb-5 md:mb-6">Managed multiple projects in Jira, overseeing timelines and deliverables. Developed and integrated APIs for AI-driven projects. Conducted web data scraping and provided client support while maintaining clear communication.</p>
             <div className="flex flex-wrap gap-2 mb-6">
               {['Jira', 'API Development', 'Python', 'Web Scraping'].map((skill, i) => (
                 <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
@@ -945,8 +948,8 @@ function WorkExperienceSection() {
                 </span>
               ))}
             </div>
-            <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
-              <img loading="lazy" decoding="async" src={webstartiomLogo} alt="Webstartiom" className="w-full h-64 object-cover" />
+            <div className="mt-4 md:mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
+              <img loading="lazy" decoding="async" src={webstartiomLogo} alt="Webstartiom" className="w-full h-40 sm:h-56 md:h-64 object-cover" />
             </div>
             <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
           </div>
@@ -956,7 +959,7 @@ function WorkExperienceSection() {
     {
       title: '2024',
       content: (
-        <a href="https://outlier.ai/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-green-950 to-cyan-950 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-green-500/20 hover:shadow-2xl hover:-translate-y-1 group">
+        <a href="https://outlier.ai/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-green-950 to-cyan-950 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-green-500/20 hover:shadow-2xl hover:-translate-y-1 group">
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-green-500 to-cyan-500 opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-30 transition-opacity" />
           <div className="relative z-10">
             <div className="flex flex-wrap items-center gap-3 mb-3">
@@ -966,8 +969,8 @@ function WorkExperienceSection() {
               <span className="w-1 h-1 rounded-full bg-white/30" />
               <span className="text-sm text-white/50">Nov 2024 - Dec 2025</span>
             </div>
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-green-300 transition-colors">AI Trainer</h3>
-            <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">Trained AI models by generating, reviewing, and refining datasets. Evaluated AI outputs for accuracy and coherence. Created prompt-response pairs and conducted domain-specific training to improve model performance.</p>
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 group-hover:text-green-300 transition-colors">AI Trainer</h3>
+            <p className="text-white/70 text-sm sm:text-base md:text-lg leading-relaxed mb-5 md:mb-6">Trained AI models by generating, reviewing, and refining datasets. Evaluated AI outputs for accuracy and coherence. Created prompt-response pairs and conducted domain-specific training to improve model performance.</p>
             <div className="flex flex-wrap gap-2 mb-6">
               {['AI Training', 'Data Annotation', 'Machine Learning'].map((skill, i) => (
                 <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
@@ -975,8 +978,8 @@ function WorkExperienceSection() {
                 </span>
               ))}
             </div>
-            <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
-              <img loading="lazy" decoding="async" src={outlierLogo} alt="Outlier AI" className="w-full h-64 object-cover" />
+            <div className="mt-4 md:mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
+              <img loading="lazy" decoding="async" src={outlierLogo} alt="Outlier AI" className="w-full h-40 sm:h-56 md:h-64 object-cover" />
             </div>
             <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
           </div>
@@ -986,7 +989,7 @@ function WorkExperienceSection() {
     {
       title: '2023',
       content: (
-        <a href="https://www.inpaqgp.com/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-cyan-950 to-blue-950 rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-cyan-500/20 hover:shadow-2xl hover:-translate-y-1 group">
+        <a href="https://www.inpaqgp.com/" target="_blank" rel="noopener noreferrer" className="block bg-gradient-to-br from-cyan-950 to-blue-950 rounded-2xl md:rounded-3xl p-5 sm:p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden transition-all duration-300 hover:border-white/30 hover:shadow-cyan-500/20 hover:shadow-2xl hover:-translate-y-1 group">
           <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-cyan-500 to-blue-500 opacity-20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 group-hover:opacity-30 transition-opacity" />
           <div className="relative z-10">
             <div className="flex flex-wrap items-center gap-3 mb-3">
@@ -996,8 +999,8 @@ function WorkExperienceSection() {
               <span className="w-1 h-1 rounded-full bg-white/30" />
               <span className="text-sm text-white/50">Sep 2023 - May 2024</span>
             </div>
-            <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 group-hover:text-cyan-300 transition-colors">Electroplating Data & Machine Operator</h3>
-            <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">Recorded and maintained daily data of all items processed in the electroplating department. Managed and monitored machines, ensuring proper operation. Conducted routine chemical level checks and maintained operational efficiency.</p>
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 md:mb-4 group-hover:text-cyan-300 transition-colors">Electroplating Data & Machine Operator</h3>
+            <p className="text-white/70 text-sm sm:text-base md:text-lg leading-relaxed mb-5 md:mb-6">Recorded and maintained daily data of all items processed in the electroplating department. Managed and monitored machines, ensuring proper operation. Conducted routine chemical level checks and maintained operational efficiency.</p>
             <div className="flex flex-wrap gap-2 mb-6">
               {['Data Management', 'Quality Control', 'Process Monitoring'].map((skill, i) => (
                 <span key={i} className="text-xs bg-white/10 text-white/70 px-3 py-1.5 rounded-full">
@@ -1005,8 +1008,8 @@ function WorkExperienceSection() {
                 </span>
               ))}
             </div>
-            <div className="mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
-              <img loading="lazy" decoding="async" src={inpaqLogo} alt="INPAQ Technology" className="w-full h-64 object-cover" />
+            <div className="mt-4 md:mt-6 w-full rounded-xl overflow-hidden border border-white/20 group-hover:border-white/40 transition-all">
+              <img loading="lazy" decoding="async" src={inpaqLogo} alt="INPAQ Technology" className="w-full h-40 sm:h-56 md:h-64 object-cover" />
             </div>
             <p className="text-white/40 text-xs text-center mt-3 group-hover:text-white/60 transition-colors">Click to visit official website →</p>
           </div>
@@ -1043,7 +1046,7 @@ function RecentWorksSection() {
           initial={{ opacity: 0, y: 60 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl md:text-6xl font-bold text-white mb-4"
+          className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-3 md:mb-4"
         >
           Recent <span className="text-gradient">Works</span>
         </motion.h2>
@@ -1051,7 +1054,7 @@ function RecentWorksSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="text-white/60 mb-4"
+          className="text-white/60 text-sm md:text-base mb-3 md:mb-4"
         >
           Scroll down to explore my key contributions and technical achievements
         </motion.p>
@@ -1059,7 +1062,7 @@ function RecentWorksSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-white/40 text-sm italic mb-12"
+          className="text-white/40 text-xs md:text-sm italic mb-8 md:mb-12"
         >
           Disclaimer: Some of these are inaccessible due to authorization purposes, contact me to get a private tour of what I've built
         </motion.p>
@@ -1068,7 +1071,7 @@ function RecentWorksSection() {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
           variants={staggerContainer}
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
         >
           {projects.map((project, index) => (
             <motion.div
@@ -1106,7 +1109,7 @@ function RecentWorksSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
-                className="absolute bottom-0 left-0 right-0 p-6"
+                className="absolute bottom-0 left-0 right-0 p-5 md:p-6"
               >
                 <p className="text-xs text-white/50 uppercase tracking-wider mb-1">{project.category}</p>
                 <h3 className="text-xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">{project.name}</h3>
@@ -1214,7 +1217,7 @@ function ProjectDetailModal({ project, onClose }: { project: ProjectType | null;
               <X className="w-5 h-5" />
             </button>
 
-            <div className="relative h-64 md:h-80 overflow-hidden rounded-t-3xl">
+            <div className="relative h-48 sm:h-64 md:h-80 overflow-hidden rounded-t-3xl">
               {project.image ? (
                 <motion.img
                   initial={{ scale: 1.1 }}
@@ -1238,7 +1241,7 @@ function ProjectDetailModal({ project, onClose }: { project: ProjectType | null;
                 <span className="inline-block text-xs text-white/70 uppercase tracking-[0.2em] font-medium px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/10 mb-3">
                   {project.category}
                 </span>
-                <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight">
+                <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-white leading-tight">
                   {project.name}
                 </h2>
               </motion.div>
@@ -1258,7 +1261,7 @@ function ProjectDetailModal({ project, onClose }: { project: ProjectType | null;
                 ))}
               </div>
 
-              <p className="text-white/75 leading-relaxed text-base md:text-lg mb-8">
+              <p className="text-white/75 leading-relaxed text-sm sm:text-base md:text-lg mb-6 md:mb-8">
                 {description}
               </p>
 
@@ -1285,6 +1288,7 @@ function ProjectDetailModal({ project, onClose }: { project: ProjectType | null;
 
 // Sticky Services Section with stacking cards
 function ServicesSection() {
+  const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -1322,7 +1326,14 @@ function ServicesSection() {
   ];
 
   return (
-    <section ref={containerRef} id="services" className="relative bg-black" style={{ height: `${(services.length + 1) * 100}vh` }}>
+    <section
+      ref={containerRef}
+      id="services"
+      className="relative bg-black"
+      // The sticky stacking effect needs a fixed scroll runway, which overflows on
+      // a phone screen; there the cards just flow normally instead.
+      style={isMobile ? undefined : { height: `${(services.length + 1) * 100}vh` }}
+    >
       {/* Grainient Background */}
       <div className="absolute inset-0 z-0">
         <Suspense fallback={null}>
@@ -1353,14 +1364,14 @@ function ServicesSection() {
         </Suspense>
       </div>
       {/* Section Header - Sticky */}
-      <div className="sticky top-0 h-screen flex flex-col justify-start pt-20 z-0">
+      <div className={isMobile ? 'relative pt-20 pb-4 z-0' : 'sticky top-0 h-screen flex flex-col justify-start pt-20 z-0'}>
         <div className="max-w-7xl mx-auto px-6 md:px-12 w-full">
           <motion.h2 
             initial={{ opacity: 0, y: 60 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-100px" }}
-            className="text-4xl md:text-6xl font-bold text-white mb-4"
+            className="text-3xl sm:text-4xl md:text-6xl font-bold text-white mb-3 md:mb-4"
           >
             <span className="text-gradient">Services</span>
           </motion.h2>
@@ -1369,7 +1380,7 @@ function ServicesSection() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             viewport={{ once: true, margin: "-100px" }}
-            className="text-white/60 max-w-2xl"
+            className="text-white/60 text-sm md:text-base max-w-2xl"
           >
             Focused on high performance and measurable results, I provide end-to-end digital solutions
           </motion.p>
@@ -1395,6 +1406,7 @@ function ServicesSection() {
             cardY={cardY}
             cardScale={cardScale}
             cardOpacity={cardOpacity}
+            isMobile={isMobile}
           />
         );
       })}
@@ -1417,9 +1429,10 @@ interface ServiceCardProps {
   cardY: any;
   cardScale: any;
   cardOpacity: any;
+  isMobile: boolean;
 }
 
-function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceCardProps) {
+function ServiceCard({ service, index, cardY, cardScale, cardOpacity, isMobile }: ServiceCardProps) {
   const divRef = useRef<HTMLDivElement>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -1464,15 +1477,21 @@ function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceC
 
   return (
     <div
-      className="sticky top-24 h-[calc(100vh-6rem)] flex items-center justify-center"
+      className={isMobile
+        ? 'relative pb-6 last:pb-20'
+        : 'sticky top-24 h-[calc(100vh-6rem)] flex items-center justify-center'}
       style={{ zIndex: index + 1 }}
     >
       <motion.div
-        style={{ 
+        style={isMobile ? undefined : { 
           y: cardY, 
           scale: cardScale, 
           opacity: cardOpacity 
         }}
+        initial={isMobile ? { opacity: 0, y: 40 } : undefined}
+        whileInView={isMobile ? { opacity: 1, y: 0 } : undefined}
+        viewport={isMobile ? { once: true, margin: '-60px' } : undefined}
+        transition={isMobile ? { duration: 0.6, ease: [0.16, 1, 0.3, 1] } : undefined}
         className="w-full max-w-5xl mx-auto px-6"
       >
         <div 
@@ -1482,7 +1501,7 @@ function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceC
           onBlur={handleBlur}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
-          className={`${service.bgColor} rounded-3xl p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden`}
+          className={`${service.bgColor} rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-12 border border-white/10 shadow-2xl relative overflow-hidden`}
         >
           {/* Spotlight hover effect */}
           <div
@@ -1499,16 +1518,16 @@ function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceC
           
           {/* Content */}
           <div className="relative z-10">
-            <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div className="grid md:grid-cols-2 gap-6 md:gap-12 items-center">
               {/* Left - Text Content */}
               <div>
                 {/* Icon */}
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br ${service.gradient} shadow-lg mb-6`}>
-                  <service.icon className="w-8 h-8 text-white" />
+                <div className={`inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br ${service.gradient} shadow-lg mb-4 md:mb-6`}>
+                  <service.icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
                 </div>
                 
-                <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">{service.title}</h3>
-                <p className="text-white/70 text-base md:text-lg leading-relaxed mb-6">{service.description}</p>
+                <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 md:mb-4 pr-10 md:pr-0">{service.title}</h3>
+                <p className="text-white/70 text-sm sm:text-base md:text-lg leading-relaxed mb-5 md:mb-6">{service.description}</p>
                 
                 {/* Includes tags */}
                 <div>
@@ -1521,7 +1540,7 @@ function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceC
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.1 * i }}
                         whileHover={{ scale: 1.05 }}
-                        className={`text-sm bg-gradient-to-r ${service.gradient} text-white px-4 py-2 rounded-full cursor-default shadow-lg`}
+                        className={`text-xs md:text-sm bg-gradient-to-r ${service.gradient} text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full cursor-default shadow-lg`}
                       >
                         {item}
                       </motion.span>
@@ -1534,7 +1553,7 @@ function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceC
               <div className="relative">
                 <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                   {/* Image container with gradient overlay */}
-                  <div className="relative aspect-square bg-black/20">
+                  <div className="relative h-44 sm:h-60 md:h-auto md:aspect-square bg-black/20">
                     <video
                       key={service.video.webm}
                       autoPlay
@@ -1558,7 +1577,7 @@ function ServiceCard({ service, index, cardY, cardScale, cardOpacity }: ServiceC
           </div>
 
           {/* Card number indicator */}
-          <div className="absolute top-6 right-6 text-white/10 text-6xl font-black z-[2]">
+          <div className="absolute top-4 right-5 md:top-6 md:right-6 text-white/10 text-4xl md:text-6xl font-black z-[2]">
             0{index + 1}
           </div>
         </div>
@@ -1646,16 +1665,16 @@ function ContactSection() {
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-gradient-to-br from-pink-500/20 to-orange-500/20 rounded-full blur-[100px] z-[1]" />
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
-            <h2 className="text-5xl md:text-7xl font-bold text-white mb-6">
+            <h2 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-4 md:mb-6">
               Get in <span className="text-gradient">Touch</span>
             </h2>
-            <p className="text-white/60 mb-8 max-w-md leading-relaxed">
+            <p className="text-white/60 text-sm md:text-base mb-6 md:mb-8 max-w-md leading-relaxed">
               Thank you for visiting my portfolio. I'm always open to discussing new opportunities, 
               collaborations, or exciting projects that align with my technical expertise in full-stack development, automation, and DevOps!
             </p>
@@ -1677,7 +1696,7 @@ function ContactSection() {
             initial={{ opacity: 0, x: 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10"
+            className="bg-white/5 backdrop-blur-sm rounded-2xl p-5 sm:p-8 border border-white/10"
           >
             <form className="space-y-6" onSubmit={handleSubmit}>
               <motion.div
@@ -1760,12 +1779,12 @@ function FooterSection({ onOpenPrivacy }: { onOpenPrivacy: () => void }) {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="flex flex-col md:flex-row justify-between items-start gap-8 mb-12"
+          className="flex flex-col md:flex-row justify-between items-start gap-8 mb-8 md:mb-12"
         >
           <div>
-            <p className="text-2xl md:text-3xl font-medium text-black">Let's do great work together</p>
+            <p className="text-xl sm:text-2xl md:text-3xl font-medium text-black">Let's do great work together</p>
           </div>
-          <div className="flex gap-16">
+          <div className="flex gap-10 sm:gap-16">
             <div>
               <p className="text-sm text-black/40 uppercase tracking-wider mb-4">Sitemap</p>
               <ul className="space-y-2">
