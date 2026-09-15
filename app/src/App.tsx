@@ -32,11 +32,11 @@ import outlierLogo from '@/assets/lanyard/images/outlier.jpg';
 import inpaqLogo from '@/assets/lanyard/images/inpaq.jpg';
 
 const njcpImage = new URL('./assets/lanyard/images/2304x1296.webp', import.meta.url).href;
-const sionImage = new URL('./assets/lanyard/images/further_front.jpg', import.meta.url).href;
+const athleteBarnImage = new URL('./assets/lanyard/images/athletebarn.jpg', import.meta.url).href;
 const quantumImage = new URL('./assets/lanyard/images/park_cam-23-1-scaled.jpg', import.meta.url).href;
-const terraImage = new URL('./assets/lanyard/images/mineral-processing-facility.jpeg', import.meta.url).href;
+const meritHerbsImage = new URL('./assets/lanyard/images/meritherbs.jpg', import.meta.url).href;
 const merdekaImage = new URL('./assets/lanyard/images/830266_1200.jpg', import.meta.url).href;
-const decisionImage = new URL('./assets/lanyard/images/WhatsApp Image 2026-02-26 at 08.36.15.jpeg', import.meta.url).href;
+const pokeTradeImage = new URL('./assets/lanyard/images/poketrade.jpg', import.meta.url).href;
 
 // Service clips: encoded as video instead of GIF. GIFs decode frame-by-frame on the
 // main thread, which is what made this section stutter; video decode is GPU-backed.
@@ -55,7 +55,7 @@ const devopsVideo = {
 
 const eternaAcademyImage = new URL('./assets/lanyard/images/eternaacademy.jpg', import.meta.url).href;
 const eternaPortalImage = new URL('./assets/lanyard/images/eternaportal.jpg', import.meta.url).href;
-const smartApplyImage = new URL('./assets/lanyard/images/SmartApply.jpeg', import.meta.url).href;
+const catalystImage = new URL('./assets/lanyard/images/catalyst.jpg', import.meta.url).href;
 
 // Animation variants with proper types
 const fadeInUp: Variants = {
@@ -1028,12 +1028,12 @@ function RecentWorksSection() {
     { name: 'NJCP Football', category: 'Full-Stack Development', tags: ['Frontend Dev', 'QA Testing', 'Architecture Design'], gradient: 'gradient-blue', link: 'https://njcpfootball.com/', image: njcpImage },
     { name: 'Eterna Academy', category: 'Full-Stack Development', tags: ['Next.js', 'Frontend Dev', 'LMS Platform'], gradient: 'gradient-blue', link: 'https://eternaacademy.id/', image: eternaAcademyImage },
     { name: 'Quantum Luminous', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-purple', link: 'https://quantum-luminous.webflow.io/', image: quantumImage },
-    { name: 'Sion Education', category: 'Full-Stack Development', tags: ['Frontend Dev', 'Database Schema', 'Architecture Design'], gradient: 'gradient-cyan', link: 'https://sion-education-website.vercel.app/', image: sionImage },
-    { name: 'Decision Educational Game', category: 'Frontend Development & Architecture', tags: ['Frontend Dev', 'Architecture Design', 'UAT'], gradient: 'gradient-pink', link: 'https://decision-educationalgame-xryd.vercel.app', image: decisionImage },
+    { name: 'Athlete Barn', category: 'Full-Stack Development', tags: ['Next.js', 'PostgreSQL & Prisma', 'Stripe Payments'], gradient: 'gradient-cyan', link: 'https://athletebarn.com', image: athleteBarnImage },
+    { name: 'PokeTrade', category: 'Full-Stack Development & Tech Lead', tags: ['Laravel', 'Live Auctions', 'Tech Lead'], gradient: 'gradient-pink', link: 'https://kevinfs.my.id', image: pokeTradeImage },
     { name: 'Eterna Portal', category: 'Full-Stack Development', tags: ['React', 'Backend Integration', 'Portal System'], gradient: 'gradient-purple', link: 'https://portal.eternaindonesia.com/', image: eternaPortalImage },
     { name: 'Merdeka Client System', category: 'Project Management & QA', tags: ['System Documentation', 'QA Testing', 'Project Manager'], gradient: 'gradient-orange', link: 'https://merdeka.app/login', image: merdekaImage },
-    { name: 'Terra Mineral Nusantara', category: 'UI/UX & 3D Design', tags: ['UI/UX Design', '3D Model Making', 'UAT'], gradient: 'gradient-green', link: 'https://terra-mineral-nusantara.webflow.io/', image: terraImage },
-    { name: 'SmartApply', category: 'AI-Powered Application', tags: ['Architecture Design', 'Frontend Dev', 'Prototype'], gradient: 'gradient-cyan', link: 'https://smartapply-sand.vercel.app/', image: smartApplyImage },
+    { name: 'Merit Herbs', category: 'Full-Stack Development', tags: ['Astro & React', 'Supabase', 'Stripe Checkout'], gradient: 'gradient-green', link: 'https://meritherbs.eternaindonesia.com', image: meritHerbsImage },
+    { name: 'Catalyst ISB', category: 'Full-Stack Development & Tech Lead', tags: ['Next.js', 'Payload CMS', 'Tech Lead'], gradient: 'gradient-cyan', link: 'https://su-isb.sift-uc.id', image: catalystImage },
   ];
 
   return (
@@ -1146,14 +1146,14 @@ function RecentWorksSection() {
 
 const projectDescriptions: Record<string, string> = {
   'NJCP Football': 'Developed the frontend interface, conducted comprehensive QA testing, and designed the system architecture for NJCP Football. The project focuses on delivering a seamless user experience with robust testing practices and scalable architecture design.',
-  'Sion Education': 'Built the entire front end, database schema, and architecture for Sion Education. The project delivers a comprehensive educational platform with robust data management and scalable system design.',
+  'Athlete Barn': 'Built Athlete Barn end to end: a full-stack recruitment platform connecting middle- and high-school athletes with college coaches. Next.js App Router with PostgreSQL and Prisma, Auth.js authentication with COPPA parental consent, real Stripe subscriptions, signed film uploads to Google Cloud Storage, and live recruiting activity over Server-Sent Events.',
   'Quantum Luminous': 'Led the UI/UX design, created 3D models, and conducted User Acceptance Testing for Quantum Luminous. The project showcases immersive 3D experiences with intuitive user interfaces and rigorous quality assurance.',
-  'Terra Mineral Nusantara': 'Led the UI/UX design, created 3D models, and conducted User Acceptance Testing for Terra Mineral Nusantara. The project delivers an industrial-grade web experience with detailed 3D visualizations and comprehensive quality assurance.',
+  'Merit Herbs': 'Built Merit Herbs end to end for a Chinese herbal apothecary: a scroll-driven illustrated storybook homepage composed from a single manifest, plus a full shop with Stripe Checkout and order tracking, consultation booking through Google Calendar, customer reviews, a journal, and a React back office on Supabase.',
   'Merdeka Client System': 'Managed system documentation, conducted comprehensive QA testing, and served as Project Manager for Merdeka Client System. The project ensures high-quality deliverables through meticulous documentation, rigorous testing protocols, and effective project coordination.',
-  'Decision Educational Game': 'Built the entire frontend application with comprehensive architecture design and conducted User Acceptance Testing for Decision Educational Game. The project delivers an engaging educational game experience with intuitive interfaces, scalable system design, and rigorous quality assurance.',
+  'PokeTrade': 'Tech lead and full-stack developer for PokeTrade, a Pokémon TCG platform for the Prismatic Evolutions set. Built on Laravel with a Vite front end: live market price tracking across thousands of cards, real-time auctions with bidding, a digital gacha pack simulator, community forums, a leaderboard, and a merch store, backed by user accounts and card binders.',
   'Eterna Academy': 'Developed a comprehensive Learning Management System (LMS) platform for Eterna Academy using Next.js. The platform features course management, student tracking, and interactive learning modules designed to enhance the educational experience with modern web technologies.',
   'Eterna Portal': 'Built an enterprise portal system for Eterna Indonesia that centralizes employee resources, project management, and internal communications. The portal integrates with various backend systems to provide a seamless user experience with robust authentication and authorization controls.',
-  'SmartApply': 'Designed the full system architecture and built the frontend for SmartApply, an AI-powered application platform. Currently live as a prototype with the backend actively in development. The platform aims to streamline and automate the application process through intelligent form filling, document processing, and automated workflow management.',
+  'Catalyst ISB': 'Tech lead and full-stack developer for Catalyst, the student union website for the Information Systems for Business department. Built with Next.js and Payload CMS so the board can manage events, divisions, gallery, and board members themselves, with a bilingual (ID/EN) interface, a video-led editorial landing page, and a live Surabaya clock.',
 };
 
 type ProjectType = {
@@ -1179,7 +1179,6 @@ function ProjectDetailModal({ project, onClose }: { project: ProjectType | null;
   }, [project, onClose]);
 
   const description = project ? (projectDescriptions[project.name] ?? `This project was developed using ${project.tags.join(', ')}, focusing on scalability, maintainability, and optimal performance.`) : '';
-  const isPrototype = project?.name === 'SmartApply';
 
   return (
     <AnimatePresence>
@@ -1274,15 +1273,6 @@ function ProjectDetailModal({ project, onClose }: { project: ProjectType | null;
                     Visit Website
                     <ArrowUpRight className="w-4 h-4 group-hover:rotate-45 transition-transform" />
                   </a>
-                )}
-                {isPrototype && (
-                  <span className="inline-flex items-center gap-2 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/20 px-4 py-2 rounded-full">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-400" />
-                    </span>
-                    Prototype · Backend in progress
-                  </span>
                 )}
               </div>
             </motion.div>
